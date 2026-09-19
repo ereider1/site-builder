@@ -73,3 +73,12 @@ export interface Project {
   createdAt: number;
   updatedAt: number;
 }
+
+export interface StarterTemplate {
+  id: string;
+  name: string;
+  description: string;
+  previewImage?: string;
+  project: Project;
+}
+
