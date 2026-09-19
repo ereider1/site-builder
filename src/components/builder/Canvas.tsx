@@ -6,7 +6,9 @@ import { cn } from "@/lib/utils";
 export const Canvas: React.FC = () => {
   const { project, activePageId, viewport, selectSection } = useBuilderStore();
 
-  const activePage = project?.pages.find((p) => p.id === activePageId);
+  if (!project) return null;
+
+  const activePage = project.pages.find((p) => p.id === activePageId);
 
   // Width classes matching viewport selection
   const viewportWidthClass =
@@ -28,9 +30,28 @@ export const Canvas: React.FC = () => {
       onClick={handleOuterClick}
       className="flex-1 bg-neutral-950 p-6 overflow-y-auto flex justify-center items-start transition-all"
     >
+      {/* Dynamic Token-Based Design System Style Injection */}
+      <style>{`
+        :root {
+          --primary-color: ${project.theme.colors.primary};
+          --secondary-color: ${project.theme.colors.secondary};
+          --background-color: ${project.theme.colors.background};
+          --surface-color: ${project.theme.colors.surface};
+          --text-color: ${project.theme.colors.text};
+          --muted-color: ${project.theme.colors.muted};
+          --border-color: ${project.theme.colors.border};
+          --border-radius: ${project.theme.radius};
+        }
+        .canvas-container {
+          font-family: ${project.theme.typography.fontFamily.body};
+          background-color: var(--background-color);
+          color: var(--text-color);
+        }
+      `}</style>
+
       <div
         className={cn(
-          "w-full bg-white shadow-2xl transition-all duration-300 min-h-[85vh] origin-top border border-neutral-800/40 rounded-sm overflow-hidden",
+          "w-full bg-white shadow-2xl transition-all duration-300 min-h-[85vh] origin-top border border-neutral-800/40 rounded-sm overflow-hidden canvas-container",
           viewportWidthClass
         )}
       >
