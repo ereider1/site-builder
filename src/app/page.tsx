@@ -12,17 +12,17 @@ export default function Home() {
         <div className="space-y-2">
           <h1 className="text-2xl font-bold tracking-tight text-white">Website Builder</h1>
           <p className="text-xs text-neutral-400 max-w-sm mx-auto leading-relaxed">
-            Welcome to the personal website design library and visual builder. Select a frozen starter design to spin up independent editable clones.
+            Welcome to the personal website design library and visual builder. Start our structured design wizard to spawn beautifully tailored consulting and studio websites.
           </p>
         </div>
 
         <div className="pt-4 flex flex-col gap-3">
           <Link 
-            href="/templates" 
+            href="/wizard" 
             className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md transition-colors"
           >
             <LayoutGrid className="w-4 h-4" />
-            Choose a Design Template
+            Start New Website Wizard
           </Link>
           
           <Link 

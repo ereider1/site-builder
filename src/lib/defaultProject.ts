@@ -177,7 +177,6 @@ export const createDefaultProject = (): Project => {
             ],
           },
           // 3. Trust / Introduction (Core Philosophy)
-          // Polish: Tightened excessive vertical whitespace (3rem padding) and gap spacing to keep a strong relationship between elements
           {
             id: "sec-trust",
             name: "03 — Core Philosophy",
@@ -756,7 +755,6 @@ export const createDefaultProject = (): Project => {
             ],
           },
           // 10. Footer
-          // Polish: Content safety & location references cleanup as strictly instructed
           {
             id: "sec-footer",
             name: "10 — Site Footer",
@@ -781,16 +779,50 @@ export const createDefaultProject = (): Project => {
                     styles: {},
                     children: [
                       {
-                        id: "comp-footer-logo",
-                        type: "Logo",
-                        props: { text: "NORTHSTAR STUDIO" },
-                        styles: { color: "#ffffff", fontSize: "1rem", fontWeight: "700" },
+                        id: "comp-footer-logo-col",
+                        type: "Container",
+                        props: { layout: "flex-col", gap: "0.5rem" },
+                        styles: {},
+                        children: [
+                          {
+                            id: "comp-footer-logo",
+                            type: "Logo",
+                            props: { text: "NORTHSTAR STUDIO" },
+                            styles: { color: "#ffffff", fontSize: "1rem", fontWeight: "700" },
+                          },
+                          {
+                            id: "comp-footer-text",
+                            type: "Text",
+                            props: { text: "© 2026 Northstar Studio. All rights reserved." },
+                            styles: { color: "#78716c", fontSize: "0.875rem" },
+                          },
+                        ],
                       },
                       {
-                        id: "comp-footer-text",
-                        type: "Text",
-                        props: { text: "© 2026 Northstar Studio. All rights reserved." },
-                        styles: { color: "#78716c", fontSize: "0.875rem" },
+                        id: "comp-footer-contact-col",
+                        type: "Container",
+                        props: { layout: "flex-col", gap: "0.5rem" },
+                        styles: { textAlign: "right" },
+                        children: [
+                          {
+                            id: "comp-footer-email",
+                            type: "Text",
+                            props: { text: "hello@northstar.studio" },
+                            styles: { color: "#78716c", fontSize: "0.875rem" },
+                          },
+                          {
+                            id: "comp-footer-phone",
+                            type: "Text",
+                            props: { text: "+45 33 12 34 56" },
+                            styles: { color: "#78716c", fontSize: "0.875rem" },
+                          },
+                          {
+                            id: "comp-footer-address",
+                            type: "Text",
+                            props: { text: "Strategic Space 12, Copenhagen" },
+                            styles: { color: "#78716c", fontSize: "0.875rem" },
+                          },
+                        ],
                       },
                     ],
                   },
