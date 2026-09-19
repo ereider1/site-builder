@@ -85,7 +85,7 @@ function runTests() {
 
   // Process remains untouched
   const processStep1 = findComponent(populatedCloneA.pages[0].sections[5].components, "comp-step1-title");
-  assertEquals(processStep1?.props.text, "Discover", "Process heading content remains unchanged");
+  assertEquals(processStep1?.props.text, "01 — Discover", "Process heading content remains unchanged");
 
   console.log("\n--- TEST: CLONE SOURCE ISOLATION CHECKS ---");
 
