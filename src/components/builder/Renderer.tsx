@@ -99,11 +99,26 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
 
       case "Heading": {
         const Tag = (props.level || "h2") as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
+        
+        // Calculate fluid responsive font-size to prevent overflow on mobile/tablet
+        let fontSize = styles.fontSize;
+        if (fontSize === "3.5rem") {
+          fontSize = "clamp(2rem, 8vw, 3.5rem)";
+        } else if (fontSize === "3rem") {
+          fontSize = "clamp(1.85rem, 6vw, 3rem)";
+        } else if (fontSize === "2.25rem") {
+          fontSize = "clamp(1.5rem, 5vw, 2.25rem)";
+        } else if (fontSize === "2rem") {
+          fontSize = "clamp(1.35rem, 4vw, 2rem)";
+        } else if (fontSize === "1.5rem") {
+          fontSize = "clamp(1.2rem, 3vw, 1.5rem)";
+        }
+
         return (
           <Tag
-            className="font-bold tracking-tight"
+            className="font-bold tracking-tight text-balance"
             style={{
-              fontSize: styles.fontSize,
+              fontSize,
               lineHeight: styles.lineHeight || "1.2",
               fontWeight: styles.fontWeight || "700",
               color: styles.color || "inherit",

@@ -25,7 +25,7 @@ export const defaultTheme: Theme = {
   },
   radius: "0px", // Professional, crisp sharp edges
   spacing: {
-    sectionPadding: "6rem",
+    sectionPadding: "5.5rem", // Beautiful consistent spacing rhythm
   },
 };
 
@@ -49,8 +49,8 @@ export const createDefaultProject = (): Project => {
             type: "Navigation",
             styles: {
               background: "#fcfcf9",
-              paddingTop: "1.5rem",
-              paddingBottom: "1.5rem",
+              paddingTop: "1.25rem",
+              paddingBottom: "1.25rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
@@ -64,7 +64,7 @@ export const createDefaultProject = (): Project => {
                     id: "comp-nav-logo",
                     type: "Logo",
                     props: { text: "NORTHSTAR STUDIO" },
-                    styles: { fontSize: "1.1rem", fontWeight: "700", color: "#111111" },
+                    styles: { fontSize: "1.05rem", fontWeight: "700", color: "#111111" },
                   },
                   {
                     id: "comp-nav-links",
@@ -96,8 +96,8 @@ export const createDefaultProject = (): Project => {
             type: "Hero",
             styles: {
               background: "#fcfcf9",
-              paddingTop: "6.5rem",
-              paddingBottom: "6.5rem",
+              paddingTop: "5.5rem",
+              paddingBottom: "5.5rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
@@ -110,7 +110,7 @@ export const createDefaultProject = (): Project => {
                   {
                     id: "comp-hero-col-left",
                     type: "Container",
-                    props: { layout: "flex-col", gap: "2rem" },
+                    props: { layout: "flex-col", gap: "1.5rem" },
                     styles: {},
                     children: [
                       {
@@ -176,22 +176,23 @@ export const createDefaultProject = (): Project => {
               },
             ],
           },
-          // 3. Trust / Introduction
+          // 3. Trust / Introduction (Core Philosophy)
+          // Polish: Tightened excessive vertical whitespace (3rem padding) and gap spacing to keep a strong relationship between elements
           {
             id: "sec-trust",
             name: "03 — Core Philosophy",
             type: "Trust",
             styles: {
               background: "#ffffff",
-              paddingTop: "5rem",
-              paddingBottom: "5rem",
+              paddingTop: "3rem",
+              paddingBottom: "3rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
               {
                 id: "comp-trust-container",
                 type: "Container",
-                props: { layout: "grid-2", gap: "3rem" },
+                props: { layout: "grid-2", gap: "2.5rem" },
                 styles: { maxWidth: "1280px" },
                 children: [
                   {
@@ -203,7 +204,7 @@ export const createDefaultProject = (): Project => {
                   {
                     id: "comp-trust-right",
                     type: "Container",
-                    props: { layout: "flex-col", gap: "2.5rem" },
+                    props: { layout: "flex-col", gap: "1.5rem" },
                     styles: {},
                     children: [
                       {
@@ -216,7 +217,7 @@ export const createDefaultProject = (): Project => {
                         id: "comp-trust-divider",
                         type: "Divider",
                         props: {},
-                        styles: { borderTop: "1px solid #e7e5e4" },
+                        styles: { borderTop: "1px solid #e7e5e4", marginTop: "0.5rem", marginBottom: "0.5rem" },
                       },
                       {
                         id: "comp-trust-sectors",
@@ -237,8 +238,8 @@ export const createDefaultProject = (): Project => {
             type: "Services",
             styles: {
               background: "#fcfcf9",
-              paddingTop: "6.5rem",
-              paddingBottom: "6.5rem",
+              paddingTop: "5.5rem",
+              paddingBottom: "5.5rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
@@ -251,7 +252,7 @@ export const createDefaultProject = (): Project => {
                   {
                     id: "comp-services-col-left",
                     type: "Container",
-                    props: { layout: "flex-col", gap: "1.5rem" },
+                    props: { layout: "flex-col", gap: "1.25rem" },
                     styles: {},
                     children: [
                       {
@@ -277,7 +278,7 @@ export const createDefaultProject = (): Project => {
                   {
                     id: "comp-services-col-right",
                     type: "Container",
-                    props: { layout: "flex-col", gap: "2rem" },
+                    props: { layout: "flex-col", gap: "1.5rem" },
                     styles: {},
                     children: [
                       // Practice 01
@@ -285,7 +286,7 @@ export const createDefaultProject = (): Project => {
                         id: "comp-practice-1",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.5rem" },
-                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.5rem" },
+                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.25rem" },
                         children: [
                           {
                             id: "comp-p1-title",
@@ -306,7 +307,7 @@ export const createDefaultProject = (): Project => {
                         id: "comp-practice-2",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.5rem" },
-                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.5rem" },
+                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.25rem" },
                         children: [
                           {
                             id: "comp-p2-title",
@@ -327,7 +328,7 @@ export const createDefaultProject = (): Project => {
                         id: "comp-practice-3",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.5rem" },
-                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.5rem" },
+                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.25rem" },
                         children: [
                           {
                             id: "comp-p3-title",
@@ -356,15 +357,15 @@ export const createDefaultProject = (): Project => {
             type: "About",
             styles: {
               background: "#ffffff",
-              paddingTop: "6.5rem",
-              paddingBottom: "6.5rem",
+              paddingTop: "5.5rem",
+              paddingBottom: "5.5rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
               {
                 id: "comp-about-container",
                 type: "Container",
-                props: { layout: "grid-2", gap: "5rem", align: "items-center" },
+                props: { layout: "grid-2", gap: "4.5rem", align: "items-center" },
                 styles: { maxWidth: "1280px" },
                 children: [
                   {
@@ -389,7 +390,7 @@ export const createDefaultProject = (): Project => {
                   {
                     id: "comp-about-col-right",
                     type: "Container",
-                    props: { layout: "flex-col", gap: "1.5rem" },
+                    props: { layout: "flex-col", gap: "1.25rem" },
                     styles: {},
                     children: [
                       {
@@ -429,21 +430,21 @@ export const createDefaultProject = (): Project => {
             type: "Process",
             styles: {
               background: "#fcfcf9",
-              paddingTop: "6.5rem",
-              paddingBottom: "6.5rem",
+              paddingTop: "5.5rem",
+              paddingBottom: "5.5rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
               {
                 id: "comp-process-main",
                 type: "Container",
-                props: { layout: "flex-col", gap: "4rem" },
+                props: { layout: "flex-col", gap: "3.5rem" },
                 styles: {},
                 children: [
                   {
                     id: "comp-process-header",
                     type: "Container",
-                    props: { layout: "flex-col", gap: "1rem" },
+                    props: { layout: "flex-col", gap: "0.75rem" },
                     styles: {},
                     children: [
                       {
@@ -470,14 +471,14 @@ export const createDefaultProject = (): Project => {
                       {
                         id: "comp-process-col-1",
                         type: "Container",
-                        props: { layout: "flex-col", gap: "3rem" },
+                        props: { layout: "flex-col", gap: "2.5rem" },
                         styles: {},
                         children: [
                           {
                             id: "comp-step-1",
                             type: "Container",
                             props: { layout: "flex-col", gap: "0.5rem" },
-                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.5rem" },
+                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.25rem" },
                             children: [
                               {
                                 id: "comp-step1-num",
@@ -503,7 +504,7 @@ export const createDefaultProject = (): Project => {
                             id: "comp-step-2",
                             type: "Container",
                             props: { layout: "flex-col", gap: "0.5rem" },
-                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.5rem" },
+                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.25rem" },
                             children: [
                               {
                                 id: "comp-step2-num",
@@ -531,14 +532,14 @@ export const createDefaultProject = (): Project => {
                       {
                         id: "comp-process-col-2",
                         type: "Container",
-                        props: { layout: "flex-col", gap: "3rem" },
+                        props: { layout: "flex-col", gap: "2.5rem" },
                         styles: {},
                         children: [
                           {
                             id: "comp-step-3",
                             type: "Container",
                             props: { layout: "flex-col", gap: "0.5rem" },
-                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.5rem" },
+                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.25rem" },
                             children: [
                               {
                                 id: "comp-step3-num",
@@ -564,7 +565,7 @@ export const createDefaultProject = (): Project => {
                             id: "comp-step-4",
                             type: "Container",
                             props: { layout: "flex-col", gap: "0.5rem" },
-                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.5rem" },
+                            styles: { borderTop: "1px solid #e7e5e4", paddingTop: "1.25rem" },
                             children: [
                               {
                                 id: "comp-step4-num",
@@ -601,21 +602,21 @@ export const createDefaultProject = (): Project => {
             type: "Featured Work",
             styles: {
               background: "#ffffff",
-              paddingTop: "6.5rem",
-              paddingBottom: "6.5rem",
+              paddingTop: "5.5rem",
+              paddingBottom: "5.5rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
               {
                 id: "comp-work-container",
                 type: "Container",
-                props: { layout: "flex-col", gap: "3rem" },
+                props: { layout: "flex-col", gap: "2.5rem" },
                 styles: {},
                 children: [
                   {
                     id: "comp-work-header",
                     type: "Container",
-                    props: { layout: "flex-col", gap: "1rem" },
+                    props: { layout: "flex-col", gap: "0.75rem" },
                     styles: {},
                     children: [
                       {
@@ -674,15 +675,15 @@ export const createDefaultProject = (): Project => {
             type: "Testimonial",
             styles: {
               background: "#fcfcf9",
-              paddingTop: "6.5rem",
-              paddingBottom: "6.5rem",
+              paddingTop: "5.5rem",
+              paddingBottom: "5.5rem",
               borderBottom: "1px solid #e7e5e4",
             },
             components: [
               {
                 id: "comp-testimonial-container",
                 type: "Container",
-                props: { layout: "flex-col", gap: "2rem" },
+                props: { layout: "flex-col", gap: "1.5rem" },
                 styles: { maxWidth: "800px", margin: "0 auto", textAlign: "center" },
                 children: [
                   {
@@ -714,14 +715,14 @@ export const createDefaultProject = (): Project => {
             type: "CTA",
             styles: {
               background: "#111111", // Pitch black high-contrast background
-              paddingTop: "8rem",
-              paddingBottom: "8rem",
+              paddingTop: "7rem",
+              paddingBottom: "7rem",
             },
             components: [
               {
                 id: "comp-cta-container",
                 type: "Container",
-                props: { layout: "flex-col", gap: "2rem" },
+                props: { layout: "flex-col", gap: "1.5rem" },
                 styles: { textAlign: "center", maxWidth: "800px", margin: "0 auto" },
                 children: [
                   {
@@ -755,21 +756,22 @@ export const createDefaultProject = (): Project => {
             ],
           },
           // 10. Footer
+          // Polish: Content safety & location references cleanup as strictly instructed
           {
             id: "sec-footer",
             name: "10 — Site Footer",
             type: "Footer",
             styles: {
               background: "#111111",
-              paddingTop: "4rem",
-              paddingBottom: "4rem",
+              paddingTop: "3.5rem",
+              paddingBottom: "3.5rem",
               borderTop: "1px solid #1c1917",
             },
             components: [
               {
                 id: "comp-footer-container",
                 type: "Container",
-                props: { layout: "flex-col", gap: "2.5rem" },
+                props: { layout: "flex-col", gap: "2rem" },
                 styles: { maxWidth: "1280px" },
                 children: [
                   {
@@ -787,7 +789,7 @@ export const createDefaultProject = (): Project => {
                       {
                         id: "comp-footer-text",
                         type: "Text",
-                        props: { text: "© 2026 Northstar Studio. Operating Globally." },
+                        props: { text: "© 2026 Northstar Studio. All rights reserved." },
                         styles: { color: "#78716c", fontSize: "0.875rem" },
                       },
                     ],
@@ -801,7 +803,7 @@ export const createDefaultProject = (): Project => {
                   {
                     id: "comp-footer-bottom",
                     type: "Text",
-                    props: { text: "Premium website crafted for Northstar Studio. All rights reserved. Created in Copenhagen." },
+                    props: { text: "Premium consulting website crafted for Northstar Studio. Strategic direction for what is next." },
                     styles: { color: "#78716c", fontSize: "0.75rem", textAlign: "center" },
                   },
                 ],
