@@ -1,13 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 import { BuilderComponent, Section } from "@/types/builder";
 import { useBuilderStore } from "@/store/builderStore";
 import { cn } from "@/lib/utils";
+import { Menu, X } from "lucide-react";
 
 interface ComponentRendererProps {
   component: BuilderComponent;
   sectionId: string;
   isEditing?: boolean;
 }
+
+// Dedicated NavLinksRenderer to support beautiful mobile menu slide-out drawers inline
+export const NavLinksRenderer: React.FC<{ links: Array<{ label: string; href: string }> }> = ({ links }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      {/* Desktop/Tablet Horizontal Links (>=768px) */}
+      <div className="hidden md:flex items-center gap-8 text-[11px] font-semibold uppercase tracking-wider text-stone-500">
+        {links.map((link, idx) => (
+          <a
+            key={idx}
+            href={link.href}
+            className="hover:text-stone-900 transition-colors duration-200"
+            onClick={(e) => e.preventDefault()}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+
+      {/* Mobile Hamburger Trigger (<768px) */}
+      <div className="md:hidden flex items-center">
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="p-1.5 text-stone-500 hover:text-stone-900 focus:outline-none transition-colors"
+          aria-label="Toggle Navigation Menu"
+        >
+          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+        </button>
+      </div>
+
+      {/* Mobile Expanded Drawer Panel */}
+      {isOpen && (
+        <div className="absolute top-14 left-0 right-0 bg-white border-b border-stone-200 shadow-xl p-6 flex flex-col gap-4 text-xs font-semibold uppercase tracking-widest text-stone-500 z-50 animate-fadeIn md:hidden">
+          {links.map((link, idx) => (
+            <a
+              key={idx}
+              href={link.href}
+              className="hover:text-stone-900 py-2 transition-colors border-b border-stone-50"
+              onClick={() => setIsOpen(false)}
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+      )}
+    </>
+  );
+};
 
 export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
   component,
@@ -28,28 +79,34 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
 
     switch (type) {
       case "Container": {
+        // High-fidelity responsive column stacking logic
+        // grid-2 stacks on mobile/tablet (<1024px) and aligns 2 columns on desktop (lg:)
+        // grid-3 stacks on mobile, splits into 2-columns on tablet (md:), and aligns 3-columns on desktop (lg:)
+        // flex-row stacks vertically on mobile/tablet and aligns horizontally on desktop
         const layoutClass =
           props.layout === "grid-2"
-            ? "grid grid-cols-1 md:grid-cols-2"
+            ? "grid grid-cols-1 lg:grid-cols-2"
             : props.layout === "grid-3"
-            ? "grid grid-cols-1 md:grid-cols-3"
+            ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
             : props.layout === "flex-row"
-            ? "flex flex-col sm:flex-row"
+            ? "flex flex-col md:flex-row md:items-center"
             : "flex flex-col";
 
         const alignClass = props.align || "";
         const justifyClass = props.justify || "";
+        
+        // Convert static spacings into beautiful, fluid responsive gaps
         const gapClass =
-          props.gap === "1rem"
-            ? "gap-4"
-            : props.gap === "1.5rem"
-            ? "gap-6"
-            : props.gap === "2rem"
-            ? "gap-8"
+          props.gap === "4rem"
+            ? "gap-6 lg:gap-16"
             : props.gap === "3rem"
-            ? "gap-12"
-            : props.gap === "4rem"
-            ? "gap-16"
+            ? "gap-5 lg:gap-12"
+            : props.gap === "2rem"
+            ? "gap-4 lg:gap-8"
+            : props.gap === "1.5rem"
+            ? "gap-3 lg:gap-6"
+            : props.gap === "1rem"
+            ? "gap-3 lg:gap-4"
             : "";
 
         return (
@@ -100,18 +157,18 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Heading": {
         const Tag = (props.level || "h2") as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
         
-        // Calculate fluid responsive font-size to prevent overflow on mobile/tablet
+        // Fluid font-size scaling using pure CSS clamp calculations for zero overflows
         let fontSize = styles.fontSize;
-        if (fontSize === "3.5rem") {
-          fontSize = "clamp(2rem, 8vw, 3.5rem)";
+        if (fontSize === "3.75rem" || fontSize === "3.5rem") {
+          fontSize = "clamp(2rem, 7vw, 3.5rem)";
         } else if (fontSize === "3rem") {
-          fontSize = "clamp(1.85rem, 6vw, 3rem)";
+          fontSize = "clamp(1.75rem, 6vw, 3rem)";
         } else if (fontSize === "2.25rem") {
           fontSize = "clamp(1.5rem, 5vw, 2.25rem)";
         } else if (fontSize === "2rem") {
           fontSize = "clamp(1.35rem, 4vw, 2rem)";
-        } else if (fontSize === "1.5rem") {
-          fontSize = "clamp(1.2rem, 3vw, 1.5rem)";
+        } else if (fontSize === "1.5rem" || fontSize === "1.35rem") {
+          fontSize = "clamp(1.2rem, 3vw, 1.35rem)";
         }
 
         return (
@@ -134,9 +191,9 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Text": {
         return (
           <p
-            className="leading-relaxed"
+            className="leading-relaxed text-pretty text-sm md:text-[15px] lg:text-base"
             style={{
-              fontSize: styles.fontSize || "1rem",
+              fontSize: styles.fontSize || "inherit",
               fontWeight: styles.fontWeight || "400",
               color: styles.color || "inherit",
               marginBottom: styles.marginBottom,
@@ -151,10 +208,10 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Button": {
         const isPrimary = props.variant === "primary";
         const btnStyle: React.CSSProperties = {
-          borderRadius: styles.borderRadius || "0.375rem",
-          backgroundColor: isPrimary ? styles.background || "#4f46e5" : "transparent",
-          color: isPrimary ? styles.color || "#ffffff" : styles.color || "#4f46e5",
-          border: isPrimary ? "none" : `1px solid ${styles.color || "#4f46e5"}`,
+          borderRadius: styles.borderRadius || "0px",
+          backgroundColor: isPrimary ? styles.background || "var(--primary-color, #111111)" : "transparent",
+          color: isPrimary ? styles.color || "#ffffff" : styles.color || "var(--primary-color, #111111)",
+          border: isPrimary ? "none" : `1px solid ${styles.color || "var(--border-color, #e7e5e4)"}`,
         };
 
         return (
@@ -162,8 +219,8 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
             <button
               onClick={(e) => e.preventDefault()}
               className={cn(
-                "px-5 py-2.5 font-medium transition-all text-sm pointer-events-none sm:pointer-events-auto",
-                isPrimary ? "shadow-sm hover:opacity-90" : "hover:bg-neutral-50"
+                "px-4 md:px-5 py-2 md:py-2.5 font-medium transition-all text-xs md:text-sm tracking-wide uppercase select-none",
+                isPrimary ? "shadow-sm hover:opacity-90" : "hover:bg-stone-50"
               )}
               style={btnStyle}
             >
@@ -176,7 +233,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Image": {
         return (
           <div
-            className="overflow-hidden relative w-full"
+            className="overflow-hidden relative w-full border border-stone-200/20"
             style={{
               aspectRatio: props.aspectRatio || "16/9",
               borderRadius: styles.borderRadius || "0px",
@@ -187,8 +244,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
               src={props.src || "https://images.unsplash.com/photo-1506744038136-46273834b3fb"}
               alt={props.alt || "Placeholder image"}
               className={cn(
-                "absolute inset-0 w-full h-full",
-                props.objectFit === "contain" ? "object-contain" : "object-cover"
+                "absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-[1.01]"
               )}
             />
           </div>
@@ -198,9 +254,9 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Logo": {
         return (
           <div
-            className="font-bold tracking-tight"
+            className="font-bold tracking-widest uppercase text-stone-900 shrink-0 select-none"
             style={{
-              fontSize: styles.fontSize || "1.25rem",
+              fontSize: styles.fontSize || "1.05rem",
               fontWeight: styles.fontWeight || "800",
               color: styles.color || "inherit",
             }}
@@ -212,27 +268,14 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
 
       case "NavLinks": {
         const linksList = (props.links || []) as Array<{ label: string; href: string }>;
-        return (
-          <div className="hidden md:flex items-center gap-6 text-sm font-medium text-neutral-600">
-            {linksList.map((link, idx) => (
-              <a
-                key={idx}
-                href={link.href}
-                className="hover:text-neutral-900 transition-colors"
-                onClick={(e) => e.preventDefault()}
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        );
+        return <NavLinksRenderer links={linksList} />;
       }
 
       case "Divider": {
         return (
           <hr
             style={{
-              borderColor: styles.borderColor || "#e5e7eb",
+              borderColor: styles.borderColor || "var(--border-color, #e7e5e4)",
               borderTopWidth: styles.borderTopWidth || "1px",
               marginTop: styles.marginTop || "1rem",
               marginBottom: styles.marginBottom || "1rem",
@@ -242,7 +285,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       }
 
       case "Spacer": {
-        return <div style={{ height: props.height || "2rem" }} />;
+        return <div className="h-4 md:h-8" style={{ height: props.height || "2rem" }} />;
       }
 
       default:
@@ -286,11 +329,20 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
     selectSection(section.id);
   };
 
-  // Convert custom section background/paddings to inline styles
+  // Converts hardcoded static padding strings (e.g. "5.5rem") to responsive CSS calc scaling blocks!
+  const parsePaddingValue = (val: string | undefined, defaultVal: string) => {
+    const rawVal = val || defaultVal;
+    if (rawVal.endsWith("rem")) {
+      const num = parseFloat(rawVal);
+      return `calc(var(--spacing-factor, 1) * ${num}rem)`;
+    }
+    return rawVal;
+  };
+
   const sectionStyle: React.CSSProperties = {
     backgroundColor: section.styles.background || "#ffffff",
-    paddingTop: section.styles.paddingTop || "4rem",
-    paddingBottom: section.styles.paddingBottom || "4rem",
+    paddingTop: parsePaddingValue(section.styles.paddingTop, "4rem"),
+    paddingBottom: parsePaddingValue(section.styles.paddingBottom, "4rem"),
     borderBottom: section.styles.borderBottom || "none",
   };
 
@@ -298,7 +350,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
     <section
       onClick={handleClick}
       className={cn(
-        "relative transition-all",
+        "relative transition-all w-full",
         isEditing && "hover:outline-2 hover:outline-dashed hover:outline-indigo-500 hover:outline-offset-[-2px] cursor-pointer",
         isEditing && isSelected && "outline-2 outline-solid outline-indigo-600 outline-offset-[-2px]"
       )}
@@ -309,7 +361,8 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
           {section.name}
         </span>
       )}
-      <div className="px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+      {/* Set tight, responsive page gutters (px-4 sm:px-8 lg:px-12) to absorb content on mobile */}
+      <div className="px-4 sm:px-8 lg:px-12 max-w-7xl mx-auto w-full">
         {section.components.map((comp) => (
           <ComponentRenderer
             key={comp.id}
