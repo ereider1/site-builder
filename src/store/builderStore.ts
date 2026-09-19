@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Project, BuilderComponent, Section, Page, Theme } from '@/types/builder';
 import { createDefaultProject } from '@/lib/defaultProject';
+import { starterTemplatesRegistry } from '@/lib/templatesRegistry';
 import {
   updateComponentInArray,
   deleteComponentFromArray,
@@ -45,6 +46,9 @@ interface BuilderState {
 
   updateTheme: (updates: Partial<Theme>) => void;
   
+  // Template Cloning Action
+  cloneTemplate: (templateId: string) => string | null;
+
   // History Actions
   undo: () => void;
   redo: () => void;
@@ -277,6 +281,38 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
       };
 
       pushToHistory(updatedProject);
+    },
+
+    // TEMPLATE CLONING MUTATION
+    // Deep clones a read-only template source to create a unique independent mutable Project
+    cloneTemplate: (templateId) => {
+      const template = starterTemplatesRegistry.find((t) => t.id === templateId);
+      if (!template) return null;
+
+      // Deep clone template snapshot data to ensure strict source isolation (no shared refs)
+      const clonedProject = deepClone(template.project);
+
+      // Create totally independent metadata
+      const newProjectId = `project_${Math.random().toString(36).substr(2, 9)}`;
+      clonedProject.id = newProjectId;
+      clonedProject.name = "Untitled Website"; // Project name defaults to Untitled Website
+      clonedProject.createdAt = Date.now();
+      clonedProject.updatedAt = Date.now();
+
+      // Persist independently in localStorage
+      localStorage.setItem(`project_${newProjectId}`, JSON.stringify(clonedProject));
+      localStorage.setItem('active_project_id', newProjectId);
+
+      set({
+        project: clonedProject,
+        history: [deepClone(clonedProject)],
+        historyIndex: 0,
+        activePageId: clonedProject.pages[0]?.id || null,
+        selectedSectionId: null,
+        selectedComponentId: null,
+      });
+
+      return newProjectId;
     },
 
     // UNDO / REDO
