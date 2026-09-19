@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useBuilderStore } from "@/store/builderStore";
 import { Sidebar } from "./Sidebar";
 import { Canvas } from "./Canvas";
@@ -13,15 +14,21 @@ import {
   Redo,
   Save,
   CheckCircle,
+  ArrowLeft,
 } from "lucide-react";
 
 export const VisualEditor: React.FC = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const targetId = searchParams ? searchParams.get("id") : null;
+
   const {
     project,
     historyIndex,
     history,
     viewport,
     initialize,
+    loadProjectById,
     setViewport,
     undo,
     redo,
@@ -30,10 +37,14 @@ export const VisualEditor: React.FC = () => {
 
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
 
-  // Run initialization on load to create default or load saved project
+  // Run initialization on load to load standard active or explicitly targeted query ID
   useEffect(() => {
-    initialize();
-  }, [initialize]);
+    if (targetId) {
+      loadProjectById(targetId);
+    } else {
+      initialize();
+    }
+  }, [initialize, loadProjectById, targetId]);
 
   // Handle explicit save button trigger
   const handleSave = () => {
@@ -58,14 +69,22 @@ export const VisualEditor: React.FC = () => {
       {/* 1. Header Navigation Bar */}
       <header className="h-14 bg-neutral-950 border-b border-neutral-800 flex items-center justify-between px-6 select-none z-10">
         <div className="flex items-center gap-3">
-          <span className="h-6 w-6 bg-indigo-600 rounded-lg flex items-center justify-center font-bold text-xs text-white shadow-md">
-            W
-          </span>
+          {/* Back to Saved Projects Dashboard Link */}
+          <button
+            onClick={() => router.push("/")}
+            className="flex items-center gap-1.5 text-neutral-400 hover:text-white transition-colors text-xs font-semibold mr-2 px-2.5 py-1.5 bg-neutral-900 border border-neutral-850 rounded-lg"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to Dashboard
+          </button>
+
+          <span className="h-4 w-[1px] bg-neutral-800 mx-1" />
+
           <span className="font-semibold text-sm text-white tracking-tight">
             Design Library Builder
           </span>
           <span className="h-4 w-[1px] bg-neutral-800 mx-2" />
-          <span className="text-xs text-neutral-400 font-medium truncate max-w-[200px]">
+          <span className="text-xs text-indigo-400 font-semibold bg-indigo-950/30 border border-indigo-900/40 px-2 py-0.5 rounded truncate max-w-[200px]" title="Currently Loaded Project">
             {project.name}
           </span>
         </div>

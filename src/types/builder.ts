@@ -82,3 +82,12 @@ export interface StarterTemplate {
   project: Project;
 }
 
+export interface ProjectMetadata {
+  id: string;
+  name: string;
+  templateId: string;
+  createdAt: number;
+  updatedAt: number;
+}
+
+

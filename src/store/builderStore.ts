@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Project, BuilderComponent, Section, Page, Theme } from '@/types/builder';
+import { Project, BuilderComponent, Section, Page, Theme, ProjectMetadata } from '@/types/builder';
 import { createDefaultProject } from '@/lib/defaultProject';
 import { starterTemplatesRegistry } from '@/lib/templatesRegistry';
 import {
@@ -14,6 +14,7 @@ type Viewport = 'desktop' | 'tablet' | 'mobile';
 interface BuilderState {
   // Data
   project: Project | null;
+  projectsList: ProjectMetadata[];
   
   // Undo/Redo Stacks
   history: Project[];
@@ -27,6 +28,7 @@ interface BuilderState {
   
   // Actions
   initialize: () => void;
+  loadProjectsList: () => void;
   setProject: (project: Project, recordHistory?: boolean) => void;
   setActivePage: (pageId: string) => void;
   selectSection: (sectionId: string | null) => void;
@@ -49,6 +51,11 @@ interface BuilderState {
   // Template Cloning Action
   cloneTemplate: (templateId: string) => string | null;
 
+  // Global Project Management Actions (Phase G.1)
+  renameProject: (id: string, newName: string) => void;
+  deleteProject: (id: string) => void;
+  loadProjectById: (id: string) => void;
+
   // History Actions
   undo: () => void;
   redo: () => void;
@@ -60,6 +67,45 @@ interface BuilderState {
 // Deep clone utility to prevent mutation side-effects in history
 const deepClone = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
 
+// Environmental check to safely run in both Browser (window) and Node test runners (global.localStorage)
+const isStorageSafe = (): boolean => {
+  return typeof window !== 'undefined' || (typeof global !== 'undefined' && typeof (global as any).localStorage !== 'undefined');
+};
+
+// Helper: Synchronize project changes back to the lightweight metadata list
+const syncToProjectIndex = (project: Project) => {
+  if (!isStorageSafe()) return;
+  const indexRaw = localStorage.getItem('projects_index');
+  let index: ProjectMetadata[] = indexRaw ? JSON.parse(indexRaw) : [];
+  
+  const existingIdx = index.findIndex(p => p.id === project.id);
+  const metadata: ProjectMetadata = {
+    id: project.id,
+    name: project.name,
+    templateId: "professional-services-modern", // Standard frozen starter design
+    createdAt: existingIdx >= 0 ? index[existingIdx].createdAt : Date.now(),
+    updatedAt: Date.now(),
+  };
+
+  if (existingIdx >= 0) {
+    index[existingIdx] = metadata;
+  } else {
+    index.push(metadata);
+  }
+
+  localStorage.setItem('projects_index', JSON.stringify(index));
+};
+
+// Helper: Remove project metadata entry from the index
+const removeFromProjectIndex = (id: string) => {
+  if (!isStorageSafe()) return;
+  const indexRaw = localStorage.getItem('projects_index');
+  if (!indexRaw) return;
+  let index: ProjectMetadata[] = JSON.parse(indexRaw);
+  index = index.filter(p => p.id !== id);
+  localStorage.setItem('projects_index', JSON.stringify(index));
+};
+
 export const useBuilderStore = create<BuilderState>((set, get) => {
   // Helper to push state onto the history stack
   const pushToHistory = (newProject: Project) => {
@@ -67,18 +113,27 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
     const cleanHistory = history.slice(0, historyIndex + 1);
     
     // Auto-save to localStorage
-    localStorage.setItem(`project_${newProject.id}`, JSON.stringify(newProject));
-    localStorage.setItem('active_project_id', newProject.id);
+    if (isStorageSafe()) {
+      localStorage.setItem(`project_${newProject.id}`, JSON.stringify(newProject));
+      localStorage.setItem('active_project_id', newProject.id);
+    }
+
+    // Update dynamic index values
+    syncToProjectIndex(newProject);
 
     set({
       project: newProject,
       history: [...cleanHistory, deepClone(newProject)],
       historyIndex: cleanHistory.length,
     });
+    
+    // Refresh local list state
+    get().loadProjectsList();
   };
 
   return {
     project: null,
+    projectsList: [],
     history: [],
     historyIndex: -1,
     activePageId: null,
@@ -87,9 +142,20 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
     viewport: 'desktop',
 
     initialize: () => {
-      // First try to load active_project_id, else load or create demo-project
-      const activeId = localStorage.getItem('active_project_id') || 'demo-project';
-      const saved = localStorage.getItem(`project_${activeId}`);
+      if (!isStorageSafe()) return;
+      
+      // First try to load active_project_id
+      const activeId = localStorage.getItem('active_project_id');
+      
+      // If we already have a loaded project in Zustand matching the activeId,
+      // skip reloading to preserve editor history and selections.
+      const currentLoaded = get().project;
+      if (currentLoaded && activeId === currentLoaded.id) {
+        return;
+      }
+
+      const loadId = activeId || 'demo-project';
+      const saved = localStorage.getItem(`project_${loadId}`);
       
       let initialProject: Project;
       if (saved) {
@@ -110,14 +176,48 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
         selectedSectionId: null,
         selectedComponentId: null,
       });
+
+      get().loadProjectsList();
+    },
+
+    loadProjectsList: () => {
+      if (!isStorageSafe()) return;
+      const indexRaw = localStorage.getItem('projects_index');
+      const list: ProjectMetadata[] = indexRaw ? JSON.parse(indexRaw) : [];
+      set({ projectsList: list });
     },
 
     setProject: (project, recordHistory = true) => {
-      if (recordHistory) {
-        pushToHistory(project);
-      } else {
-        set({ project });
+      if (isStorageSafe()) {
+        // Auto-save to localStorage under its unique project ID key
+        localStorage.setItem(`project_${project.id}`, JSON.stringify(project));
+        localStorage.setItem('active_project_id', project.id);
       }
+
+      // Sync metadata registry
+      syncToProjectIndex(project);
+
+      if (recordHistory) {
+        const { history, historyIndex } = get();
+        const cleanHistory = history.slice(0, historyIndex + 1);
+        set({
+          project,
+          history: [...cleanHistory, deepClone(project)],
+          historyIndex: cleanHistory.length,
+        });
+      } else {
+        // Initialize fresh history for a newly imported/spawned project
+        set({
+          project,
+          history: [deepClone(project)],
+          historyIndex: 0,
+          activePageId: project.pages[0]?.id || null,
+          selectedSectionId: null,
+          selectedComponentId: null,
+        });
+      }
+
+      get().loadProjectsList();
     },
     
     setActivePage: (pageId) => set({ activePageId: pageId, selectedSectionId: null, selectedComponentId: null }),
@@ -299,9 +399,13 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
       clonedProject.createdAt = Date.now();
       clonedProject.updatedAt = Date.now();
 
-      // Persist independently in localStorage
-      localStorage.setItem(`project_${newProjectId}`, JSON.stringify(clonedProject));
-      localStorage.setItem('active_project_id', newProjectId);
+      if (isStorageSafe()) {
+        localStorage.setItem(`project_${newProjectId}`, JSON.stringify(clonedProject));
+        localStorage.setItem('active_project_id', newProjectId);
+      }
+
+      // Save metadata index record
+      syncToProjectIndex(clonedProject);
 
       set({
         project: clonedProject,
@@ -312,7 +416,88 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
         selectedComponentId: null,
       });
 
+      get().loadProjectsList();
+
       return newProjectId;
+    },
+
+    // GLOBAL PROJECT MANAGEMENT ACTIONS (Phase G.1)
+    renameProject: (id, newName) => {
+      if (!isStorageSafe()) return;
+      const cleanName = newName.trim() || "Untitled Website";
+      
+      // Update metadata index
+      const indexRaw = localStorage.getItem('projects_index');
+      if (indexRaw) {
+        let index: ProjectMetadata[] = JSON.parse(indexRaw);
+        index = index.map((p) => (p.id === id ? { ...p, name: cleanName, updatedAt: Date.now() } : p));
+        localStorage.setItem('projects_index', JSON.stringify(index));
+      }
+
+      // Update separate project files
+      const savedRaw = localStorage.getItem(`project_${id}`);
+      if (savedRaw) {
+        const savedProject: Project = JSON.parse(savedRaw);
+        savedProject.name = cleanName;
+        savedProject.updatedAt = Date.now();
+        localStorage.setItem(`project_${id}`, JSON.stringify(savedProject));
+        
+        // If it is currently loaded in memory, sync Zustand memory state as well
+        const { project } = get();
+        if (project && project.id === id) {
+          set({
+            project: { ...project, name: cleanName, updatedAt: Date.now() },
+          });
+        }
+      }
+
+      get().loadProjectsList();
+    },
+
+    deleteProject: (id) => {
+      if (!isStorageSafe()) return;
+      
+      // Remove individual key
+      localStorage.removeItem(`project_${id}`);
+      
+      // Remove from index
+      removeFromProjectIndex(id);
+
+      // If active cleared, unset
+      const activeId = localStorage.getItem('active_project_id');
+      if (activeId === id) {
+        localStorage.removeItem('active_project_id');
+        set({
+          project: null,
+          history: [],
+          historyIndex: -1,
+          selectedSectionId: null,
+          selectedComponentId: null,
+        });
+      }
+
+      get().loadProjectsList();
+    },
+
+    loadProjectById: (id) => {
+      if (!isStorageSafe()) return;
+      const savedRaw = localStorage.getItem(`project_${id}`);
+      if (!savedRaw) return;
+
+      const loadedProject: Project = JSON.parse(savedRaw);
+
+      localStorage.setItem('active_project_id', id);
+
+      set({
+        project: loadedProject,
+        history: [deepClone(loadedProject)],
+        historyIndex: 0,
+        activePageId: loadedProject.pages[0]?.id || null,
+        selectedSectionId: null,
+        selectedComponentId: null,
+      });
+
+      get().loadProjectsList();
     },
 
     // UNDO / REDO
@@ -327,7 +512,9 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
           selectedSectionId: null,
           selectedComponentId: null,
         });
-        localStorage.setItem(`project_${previousProject.id}`, JSON.stringify(previousProject));
+        if (isStorageSafe()) {
+          localStorage.setItem(`project_${previousProject.id}`, JSON.stringify(previousProject));
+        }
       }
     },
 
@@ -342,14 +529,22 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
           selectedSectionId: null,
           selectedComponentId: null,
         });
-        localStorage.setItem(`project_${nextProject.id}`, JSON.stringify(nextProject));
+        if (isStorageSafe()) {
+          localStorage.setItem(`project_${nextProject.id}`, JSON.stringify(nextProject));
+        }
       }
     },
 
     saveProject: () => {
       const { project } = get();
       if (project) {
-        localStorage.setItem(`project_${project.id}`, JSON.stringify(project));
+        project.updatedAt = Date.now();
+        if (isStorageSafe()) {
+          localStorage.setItem(`project_${project.id}`, JSON.stringify(project));
+          localStorage.setItem('active_project_id', project.id);
+        }
+        syncToProjectIndex(project);
+        get().loadProjectsList();
         console.log('Explicit save executed');
       }
     }
