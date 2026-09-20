@@ -10,6 +10,42 @@ interface ComponentRendererProps {
   isEditing?: boolean;
 }
 
+// Fluid font-size scaling using CSS Container Query Widths (cqw)
+// This guarantees perfect fluid typography based on actual canvas container width,
+// triggering seamlessly both on real device resize operations and editor viewport buttons!
+export const getResponsiveFontSize = (fontSize: string | undefined): string | undefined => {
+  if (!fontSize) return undefined;
+  
+  if (fontSize.endsWith("rem")) {
+    const val = parseFloat(fontSize);
+    if (val >= 4.5) {
+      // 4.5rem (72px) scales down to 2.25rem (36px) on mobile viewports
+      return `clamp(2.25rem, 11cqw, ${val}rem)`;
+    }
+    if (val >= 3.5) {
+      // 3.5rem - 4.0rem scales down to 2rem (32px) on mobile viewports
+      return `clamp(2rem, 10cqw, ${val}rem)`;
+    }
+    if (val >= 2.5) {
+      // 3rem scales down to 1.75rem (28px) on mobile viewports
+      return `clamp(1.75rem, 8cqw, ${val}rem)`;
+    }
+    if (val >= 2.0) {
+      // 2rem - 2.5rem scales down to 1.5rem (24px) on mobile viewports
+      return `clamp(1.5rem, 6cqw, ${val}rem)`;
+    }
+    if (val >= 1.25) {
+      // 1.25rem - 1.5rem scales down to 1.15rem (18.4px) on mobile viewports
+      return `clamp(1.15rem, 4cqw, ${val}rem)`;
+    }
+    if (val >= 1.0) {
+      // Body text 1.125rem (18px) scales down to 0.95rem (15.2px) on mobile viewports
+      return `clamp(0.95rem, 3cqw, ${val}rem)`;
+    }
+  }
+  return fontSize;
+};
+
 // Dedicated NavLinksRenderer to support beautiful mobile menu slide-out drawers inline
 export const NavLinksRenderer: React.FC<{ links: Array<{ label: string; href: string }> }> = ({ links }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -157,25 +193,11 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Heading": {
         const Tag = (props.level || "h2") as "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
         
-        // Fluid font-size scaling using pure CSS clamp calculations for zero overflows
-        let fontSize = styles.fontSize;
-        if (fontSize === "3.75rem" || fontSize === "3.5rem") {
-          fontSize = "clamp(2rem, 7vw, 3.5rem)";
-        } else if (fontSize === "3rem") {
-          fontSize = "clamp(1.75rem, 6vw, 3rem)";
-        } else if (fontSize === "2.25rem") {
-          fontSize = "clamp(1.5rem, 5vw, 2.25rem)";
-        } else if (fontSize === "2rem") {
-          fontSize = "clamp(1.35rem, 4vw, 2rem)";
-        } else if (fontSize === "1.5rem" || fontSize === "1.35rem") {
-          fontSize = "clamp(1.2rem, 3vw, 1.35rem)";
-        }
-
         return (
           <Tag
             className="font-bold tracking-tight text-balance"
             style={{
-              fontSize,
+              fontSize: getResponsiveFontSize(styles.fontSize),
               lineHeight: styles.lineHeight || "1.2",
               fontWeight: styles.fontWeight || "700",
               color: styles.color || "inherit",
@@ -191,9 +213,9 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Text": {
         return (
           <p
-            className="leading-relaxed text-pretty text-sm md:text-[15px] lg:text-base"
+            className="leading-relaxed text-pretty"
             style={{
-              fontSize: styles.fontSize || "inherit",
+              fontSize: getResponsiveFontSize(styles.fontSize || "1.125rem"),
               fontWeight: styles.fontWeight || "400",
               color: styles.color || "inherit",
               marginBottom: styles.marginBottom,
@@ -254,9 +276,9 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       case "Logo": {
         return (
           <div
-            className="font-bold tracking-widest uppercase text-stone-900 shrink-0 select-none"
+            className="font-bold tracking-widest uppercase text-stone-900 shrink-0 select-none animate-none"
             style={{
-              fontSize: styles.fontSize || "1.05rem",
+              fontSize: styles.fontSize || "0.875rem",
               fontWeight: styles.fontWeight || "800",
               color: styles.color || "inherit",
             }}

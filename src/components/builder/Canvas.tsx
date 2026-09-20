@@ -54,6 +54,10 @@ export const Canvas: React.FC = () => {
           font-family: ${project.theme.typography.fontFamily.body};
           background-color: var(--background-color);
           color: var(--text-color);
+          
+          /* Container queries activation - lets fluid clamp() calculate based on actual parent width! */
+          container-type: inline-size;
+          container-name: canvas;
         }
 
         .canvas-container h1,
