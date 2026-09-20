@@ -41,8 +41,8 @@ function runBlockLibraryTests() {
   // Clear previous states
   mockLocalStorage.clear();
 
-  // 1. Registry Contains All 19 Blocks (Phase Content complete)
-  assertEquals(starterBlocksRegistry.length, 19, "Blocks Registry contains exactly 19 blocks total");
+  // 1. Registry Contains All 29 Blocks (Phase Team & Testimonial complete)
+  assertEquals(starterBlocksRegistry.length, 29, "Blocks Registry contains exactly 29 blocks total");
   
   const heroSplitDef = findBlockById("hero-editorial-split");
   assertEquals(heroSplitDef !== null, true, "Block Registry contains hero-editorial-split");
@@ -108,6 +108,40 @@ function runBlockLibraryTests() {
 
   const c7Def = findBlockById("content-featured-stories");
   assertEquals(c7Def !== null, true, "Block Registry contains content-featured-stories");
+
+  // Verify Team Blocks are Registered
+  const t1Def = findBlockById("team-four-column");
+  assertEquals(t1Def !== null, true, "Block Registry contains team-four-column");
+  assertEquals(t1Def?.category, "Team", "team-four-column categorized under Team");
+
+  const t2Def = findBlockById("team-image-bio-rows");
+  assertEquals(t2Def !== null, true, "Block Registry contains team-image-bio-rows");
+
+  const t3Def = findBlockById("team-eight-grid");
+  assertEquals(t3Def !== null, true, "Block Registry contains team-eight-grid");
+
+  const t4Def = findBlockById("team-featured");
+  assertEquals(t4Def !== null, true, "Block Registry contains team-featured");
+
+  const t5Def = findBlockById("team-editorial-list");
+  assertEquals(t5Def !== null, true, "Block Registry contains team-editorial-list");
+
+  // Verify Testimonial Blocks are Registered
+  const test1Def = findBlockById("testimonial-two-column");
+  assertEquals(test1Def !== null, true, "Block Registry contains testimonial-two-column");
+  assertEquals(test1Def?.category, "Testimonial", "testimonial-two-column categorized under Testimonial");
+
+  const test2Def = findBlockById("testimonial-large-quote");
+  assertEquals(test2Def !== null, true, "Block Registry contains testimonial-large-quote");
+
+  const test3Def = findBlockById("testimonial-three-column");
+  assertEquals(test3Def !== null, true, "Block Registry contains testimonial-three-column");
+
+  const test4Def = findBlockById("testimonial-quote-image");
+  assertEquals(test4Def !== null, true, "Block Registry contains testimonial-quote-image");
+
+  const test5Def = findBlockById("testimonial-editorial-list");
+  assertEquals(test5Def !== null, true, "Block Registry contains testimonial-editorial-list");
 
   // 2. Factory creates valid Section (Hero Centered)
   const sectionHeroCentered = heroCenteredDef!.createSection();

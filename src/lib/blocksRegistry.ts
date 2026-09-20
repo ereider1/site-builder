@@ -11,8 +11,6 @@ import { createFeaturesAlternatingBlock } from "./blocks/featuresAlternating";
 import { createFeaturesEditorialListBlock } from "./blocks/featuresEditorialList";
 import { createFeaturesAsymmetricGridBlock } from "./blocks/featuresAsymmetricGrid";
 import { createFeaturesStatementBlock } from "./blocks/featuresStatement";
-
-// 7 New Content blocks
 import { createContentCenteredColumnsBlock } from "./blocks/contentCenteredColumns";
 import { createContentImageGridBlock } from "./blocks/contentImageGrid";
 import { createContentTextGridBlock } from "./blocks/contentTextGrid";
@@ -20,6 +18,20 @@ import { createContentSplitEditorialBlock } from "./blocks/contentSplitEditorial
 import { createContentImageTextBlock } from "./blocks/contentImageText";
 import { createContentQuoteImageBlock } from "./blocks/contentQuoteImage";
 import { createContentFeaturedStoriesBlock } from "./blocks/contentFeaturedStories";
+
+// 5 New Team Blocks
+import { createTeamFourColumnBlock } from "./blocks/teamFourColumn";
+import { createTeamImageBioRowsBlock } from "./blocks/teamImageBioRows";
+import { createTeamEightGridBlock } from "./blocks/teamEightGrid";
+import { createTeamFeaturedBlock } from "./blocks/teamFeatured";
+import { createTeamEditorialListBlock } from "./blocks/teamEditorialList";
+
+// 5 New Testimonial Blocks
+import { createTestimonialTwoColumnBlock } from "./blocks/testimonialTwoColumn";
+import { createTestimonialLargeQuoteBlock } from "./blocks/testimonialLargeQuote";
+import { createTestimonialThreeColumnBlock } from "./blocks/testimonialThreeColumn";
+import { createTestimonialQuoteImageBlock } from "./blocks/testimonialQuoteImage";
+import { createTestimonialEditorialListBlock } from "./blocks/testimonialEditorialList";
 
 export const starterBlocksRegistry: BlockDefinition[] = [
   // 1. HERO CATEGORY
@@ -124,7 +136,7 @@ export const starterBlocksRegistry: BlockDefinition[] = [
     createSection: createFeaturesStatementBlock,
   },
 
-  // 4. CONTENT CATEGORY (Phase Content Category complete)
+  // 4. CONTENT CATEGORY
   {
     id: "content-centered-columns",
     name: "Content — Centered Intro + Columns",
@@ -180,6 +192,90 @@ export const starterBlocksRegistry: BlockDefinition[] = [
     description: "A large featured story block with widescreen image on the left, balanced with smaller vertical story units on the right.",
     previewImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80",
     createSection: createContentFeaturedStoriesBlock,
+  },
+
+  // 5. TEAM CATEGORY (Phase Team complete)
+  {
+    id: "team-four-column",
+    name: "Team — Four Column",
+    category: "Team",
+    description: "A clean, horizontal row of team member portraits, with their names, roles, and fine spacing grid alignment.",
+    previewImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+    createSection: createTeamFourColumnBlock,
+  },
+  {
+    id: "team-image-bio-rows",
+    name: "Team — Image + Bio Rows",
+    category: "Team",
+    description: "Spacious alternating/standard rows pairing square team portraits left with detailed role bios on the right.",
+    previewImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+    createSection: createTeamImageBioRowsBlock,
+  },
+  {
+    id: "team-eight-grid",
+    name: "Team — Eight Person Grid",
+    category: "Team",
+    description: "A dense, high-impact scannable grid showcasing 8 team member portraits side-by-side with minimal textual descriptions.",
+    previewImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+    createSection: createTeamEightGridBlock,
+  },
+  {
+    id: "team-featured",
+    name: "Team — Featured Person",
+    category: "Team",
+    description: "A visually majestic lead person portrait left balanced adjacent with a vertical support list of group directors right.",
+    previewImage: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80",
+    createSection: createTeamFeaturedBlock,
+  },
+  {
+    id: "team-editorial-list",
+    name: "Team — Editorial List",
+    category: "Team",
+    description: "A gorgeous typography-driven team directory index separated by thin, clean rules and right-pointing indicators.",
+    previewImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
+    createSection: createTeamEditorialListBlock,
+  },
+
+  // 6. TESTIMONIAL CATEGORY (Phase Testimonial complete)
+  {
+    id: "testimonial-two-column",
+    name: "Testimonial — Two Column",
+    category: "Testimonial",
+    description: "Two clean, understated client testimonial cards side-by-side on desktop, stacking beautifully on mobile screens.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createTestimonialTwoColumnBlock,
+  },
+  {
+    id: "testimonial-large-quote",
+    name: "Testimonial — Large Quote",
+    category: "Testimonial",
+    description: "One giant centered client quote statement forming the absolute focal point of strategic credibility and voice.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createTestimonialLargeQuoteBlock,
+  },
+  {
+    id: "testimonial-three-column",
+    name: "Testimonial — Three Column",
+    category: "Testimonial",
+    description: "Three horizontal client testimonials separated by fine top-borders, utilizing light visual layouts.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createTestimonialThreeColumnBlock,
+  },
+  {
+    id: "testimonial-quote-image",
+    name: "Testimonial — Quote + Image",
+    category: "Testimonial",
+    description: "Large quote statement column on the left balanced adjacent with a square portrait of the client on the right.",
+    previewImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80",
+    createSection: createTestimonialQuoteImageBlock,
+  },
+  {
+    id: "testimonial-editorial-list",
+    name: "Testimonial — Editorial List",
+    category: "Testimonial",
+    description: "Several high-end client quote statements stacked vertically and divided by fine, minimalist horizontal rule lines.",
+    previewImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
+    createSection: createTestimonialEditorialListBlock,
   },
 ];
 
