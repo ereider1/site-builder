@@ -28,7 +28,7 @@ export const Canvas: React.FC = () => {
   return (
     <div
       onClick={handleOuterClick}
-      className="flex-1 bg-neutral-950 p-6 overflow-y-auto flex justify-center items-start transition-all"
+      className="flex-1 bg-stone-100 p-6 overflow-y-auto flex justify-center items-start transition-all"
     >
       {/* 
         Dynamic Token-Based Design System Style Injection
