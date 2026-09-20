@@ -2,9 +2,8 @@ import { Section } from "@/types/builder";
 
 const generateId = (prefix: string) => `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
 
-export const createNavigationMinimalBlock = (): Section => {
+export const createHeaderMinimalBlock = (): Section => {
   const containerId = generateId("comp-container");
-  
   const innerContainerId = generateId("comp-container");
   const logoId = generateId("comp-logo");
   const linksId = generateId("comp-navlinks");
@@ -12,9 +11,9 @@ export const createNavigationMinimalBlock = (): Section => {
 
   return {
     id: generateId("sec-nav-minimal"),
-    name: "Navigation — Minimal",
+    name: "Header — Minimal",
     type: "Header",
-    blockId: "navigation-minimal",
+    blockId: "header-minimal",
     styles: {
       background: "var(--background-color)",
       paddingTop: "1.5rem", // Slim, elegant header heights
@@ -38,7 +37,7 @@ export const createNavigationMinimalBlock = (): Section => {
             props: { layout: "flex-row", justify: "justify-between", align: "items-center" },
             styles: {},
             children: [
-              // Left: Logo
+              // Left: Logo text brand
               {
                 id: logoId,
                 type: "Logo",
@@ -65,7 +64,7 @@ export const createNavigationMinimalBlock = (): Section => {
               {
                 id: btnId,
                 type: "Button",
-                props: { label: "Connect", variant: "primary", link: "#contact" },
+                props: { label: "Let's Talk", variant: "primary", link: "#contact" },
                 styles: { background: "var(--primary-color)", color: "var(--surface-color)", borderRadius: "var(--border-radius)", fontSize: "0.75rem", letterSpacing: "0.05em" },
               },
             ],

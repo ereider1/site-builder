@@ -29,18 +29,36 @@ import { createTestimonialThreeColumnBlock } from "./blocks/testimonialThreeColu
 import { createTestimonialQuoteImageBlock } from "./blocks/testimonialQuoteImage";
 import { createTestimonialEditorialListBlock } from "./blocks/testimonialEditorialList";
 
-// Reusable mobile navigation test block
-import { createNavigationMinimalBlock } from "./blocks/navigationMinimal";
+// 3 New Foundational Header Navigation Blocks
+import { createHeaderMinimalBlock } from "./blocks/headerMinimal";
+import { createHeaderSplitNavigationBlock } from "./blocks/headerSplitNavigation";
+import { createHeaderCenteredBlock } from "./blocks/headerCentered";
 
 export const starterBlocksRegistry: BlockDefinition[] = [
-  // 0. HEADER CATEGORY (Phase Responsive Navigation foundation)
+  // 0. HEADER CATEGORY (Foundational responsive mobile navigation headers)
   {
-    id: "navigation-minimal",
-    name: "Navigation — Minimal",
+    id: "header-minimal",
+    name: "Header — Minimal",
     category: "HEADER", // Standard uppercase taxonomy
-    description: "A gorgeous, responsive minimal header layout housing an editable logo, responsive menu links, and a primary CTA button.",
+    description: "A restrained navigation header with brand on the left, primary navigation in the center, and a simple CTA on the right.",
     previewImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
-    createSection: createNavigationMinimalBlock,
+    createSection: createHeaderMinimalBlock,
+  },
+  {
+    id: "header-split-navigation",
+    name: "Header — Split Navigation",
+    category: "HEADER",
+    description: "A structured navigation header with a distinct brand area, primary navigation with visual trailing line separator, and action CTA area.",
+    previewImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
+    createSection: createHeaderSplitNavigationBlock,
+  },
+  {
+    id: "header-centered",
+    name: "Header — Centered",
+    category: "HEADER",
+    description: "An editorial navigation header with centered branding, centered navigation arrangement, and centered primary action button.",
+    previewImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
+    createSection: createHeaderCenteredBlock,
   },
 
   // 1. HERO CATEGORY
