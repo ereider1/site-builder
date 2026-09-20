@@ -392,6 +392,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       onClick={handleClick}
       className={cn(
         "relative transition-all group/comp",
+        `comp-${component.type.toLowerCase()}`,
         isEditing && "cursor-pointer rounded hover:outline-2 hover:outline-dashed hover:outline-indigo-400 hover:outline-offset-2",
         isEditing && isSelected && "outline-2 outline-solid outline-indigo-600 outline-offset-2"
       )}

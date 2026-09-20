@@ -36,6 +36,8 @@ export const Canvas: React.FC = () => {
         to render actual responsive layouts both on real devices AND inside editor viewport toggles!
       */}
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Inter:wght@100..900&family=Syne:wght@400..800&family=Cabinet+Grotesk:wght@400..900&family=Cinzel:wght@400..900&family=Instrument+Serif:ital,wght@0,400;1,400&display=swap');
+
         :root {
           --primary-color: ${project.theme.colors.primary};
           --secondary-color: ${project.theme.colors.secondary};
@@ -49,15 +51,10 @@ export const Canvas: React.FC = () => {
           /* Spacing scaling factor - reduces paddings proportionately across smaller screens */
           --spacing-factor: 1;
         }
-        
-        .canvas-container {
-          font-family: ${project.theme.typography.fontFamily.body};
-          background-color: var(--background-color);
-          color: var(--text-color);
-          
-          /* Container queries activation - lets fluid clamp() calculate based on actual parent width! */
-          container-type: inline-size;
-          container-name: canvas;
+
+        .canvas-container,
+        .canvas-container * {
+          font-family: ${project.theme.typography.fontFamily.body} !important;
         }
 
         .canvas-container h1,
@@ -65,8 +62,25 @@ export const Canvas: React.FC = () => {
         .canvas-container h3,
         .canvas-container h4,
         .canvas-container h5,
-        .canvas-container h6 {
-          font-family: ${project.theme.typography.fontFamily.heading};
+        .canvas-container h6,
+        .canvas-container h1 *,
+        .canvas-container h2 *,
+        .canvas-container h3 *,
+        .canvas-container h4 *,
+        .canvas-container h5 *,
+        .canvas-container h6 *,
+        .canvas-container .comp-logo,
+        .canvas-container .comp-logo * {
+          font-family: ${project.theme.typography.fontFamily.heading} !important;
+        }
+        
+        .canvas-container {
+          background-color: var(--background-color);
+          color: var(--text-color);
+          
+          /* Container queries activation - lets fluid clamp() calculate based on actual parent width! */
+          container-type: inline-size;
+          container-name: canvas;
         }
 
         /* ------------------------------------------------ */
