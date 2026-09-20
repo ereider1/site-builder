@@ -328,6 +328,136 @@ export const Sidebar: React.FC = () => {
                               ))}
                             </div>
                           </div>
+                        ) : block.id === "features-three-column" ? (
+                          <div className="w-full flex flex-col justify-between py-1 px-1.5 z-10">
+                            {/* Centered header */}
+                            <div className="space-y-0.75 text-center flex flex-col items-center">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-14 h-1 bg-indigo-500/35 rounded-sm" />
+                            </div>
+                            {/* 3 columns */}
+                            <div className="flex gap-3 pt-2">
+                              {[1, 2, 3].map((col) => (
+                                <div key={col} className="flex-1 space-y-1 border-t border-neutral-800/80 pt-1.5">
+                                  <span className="block text-[5px] text-stone-500/60 font-mono leading-none">0{col}</span>
+                                  <div className="w-7 h-0.75 bg-indigo-500/40 rounded-sm" />
+                                  <div className="w-full h-0.5 bg-stone-800/25 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "features-three-column-cards" ? (
+                          <div className="w-full flex flex-col justify-between py-1 z-10">
+                            {/* Header */}
+                            <div className="space-y-0.75">
+                              <div className="w-6 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-14 h-1 bg-indigo-500/35 rounded-sm" />
+                            </div>
+                            {/* 3 cards */}
+                            <div className="flex gap-2 pt-1.5">
+                              {[1, 2, 3].map((idx) => (
+                                <div key={idx} className="flex-1 bg-neutral-900 border border-neutral-850 p-1.5 rounded-sm flex flex-col gap-1 shadow-sm">
+                                  <div className="w-3 h-3 bg-indigo-600/15 border border-indigo-500/10 rounded-sm shrink-0" />
+                                  <div className="w-7 h-0.75 bg-indigo-500/40 rounded-sm mt-0.5" />
+                                  <div className="w-full h-0.5 bg-stone-800/25 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "features-image-list" ? (
+                          <div className="w-full flex gap-3.5 py-1 items-center z-10">
+                            {/* Left Image block */}
+                            <div className="w-5/12 aspect-[3/4] bg-neutral-900 border border-neutral-850 rounded flex items-center justify-center relative overflow-hidden shrink-0">
+                              <ImageIcon className="w-3.5 h-3.5 text-stone-700/35" />
+                            </div>
+                            {/* Right list columns */}
+                            <div className="flex-1 flex flex-col gap-1">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full mb-0.5" />
+                              {[1, 2, 3].map((li) => (
+                                <div key={li} className="border-t border-neutral-800/80 py-1 space-y-0.75">
+                                  <div className="w-12 h-0.75 bg-indigo-500/35 rounded-sm" />
+                                  <div className="w-full h-0.5 bg-stone-800/20 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "features-alternating" ? (
+                          <div className="w-full flex flex-col gap-1.5 py-0.5 z-10 justify-center">
+                            {/* Alternating row 1 */}
+                            <div className="flex gap-3 items-center">
+                              <div className="w-4/12 h-5 bg-neutral-900 border border-neutral-850 rounded-sm shrink-0" />
+                              <div className="flex-1 space-y-0.75">
+                                <div className="w-10 h-0.75 bg-indigo-500/35 rounded-sm" />
+                                <div className="w-full h-0.5 bg-stone-800/20 rounded-full" />
+                              </div>
+                            </div>
+                            {/* Alternating row 2 */}
+                            <div className="flex gap-3 items-center">
+                              <div className="flex-1 space-y-0.75 text-right flex flex-col items-end">
+                                <div className="w-10 h-0.75 bg-indigo-500/35 rounded-sm" />
+                                <div className="w-full h-0.5 bg-stone-800/20 rounded-full" />
+                              </div>
+                              <div className="w-4/12 h-5 bg-neutral-900 border border-neutral-850 rounded-sm shrink-0" />
+                            </div>
+                          </div>
+                        ) : block.id === "features-editorial-list" ? (
+                          <div className="w-full flex flex-col justify-between py-1 z-10">
+                            <div className="flex gap-1.5 items-center">
+                              <div className="w-6 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-12 h-1 bg-indigo-500/40 rounded" />
+                            </div>
+                            
+                            <div className="space-y-1 pt-1 flex-1 flex flex-col justify-center">
+                              {[1, 2, 3].map((rowIdx) => (
+                                <div key={rowIdx} className="border-t border-neutral-800/80 py-1.5 flex justify-between items-center w-full">
+                                  <div className="flex gap-2 items-center">
+                                    <span className="text-[7px] text-stone-500/60 font-mono">0{rowIdx}</span>
+                                    <div className="space-y-0.5">
+                                      <div className="w-10 h-0.75 bg-indigo-500/30 rounded-sm" />
+                                      <div className="w-16 h-0.5 bg-stone-800/20 rounded-full" />
+                                    </div>
+                                  </div>
+                                  <span className="text-[7px] text-indigo-500/50 mr-1">→</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "features-asymmetric-grid" ? (
+                          <div className="w-full flex gap-2.5 py-1 z-10 justify-between items-center">
+                            {/* Wide Card left */}
+                            <div className="flex-1 bg-neutral-900 border border-neutral-850 p-2 rounded-sm flex flex-col gap-1.5 shadow-sm h-full justify-center">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full animate-none" />
+                              <div className="w-14 h-1 bg-indigo-500/35 rounded-sm" />
+                              <div className="w-full h-4 bg-neutral-950 rounded-sm shrink-0 border border-neutral-800" />
+                            </div>
+                            {/* Vertical stack right */}
+                            <div className="w-4/12 flex flex-col gap-1.5 shrink-0">
+                              {[1, 2].map((i) => (
+                                <div key={i} className="bg-neutral-900 border border-neutral-850 p-1.5 rounded-sm flex flex-col gap-1 shadow-sm">
+                                  <div className="w-6 h-0.75 bg-indigo-500/45 rounded-sm" />
+                                  <div className="w-full h-0.5 bg-stone-800/35 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "features-statement" ? (
+                          <div className="w-full flex gap-3.5 py-1 items-center z-10">
+                            {/* Left statement column */}
+                            <div className="w-5/12 space-y-1 shrink-0">
+                              <div className="w-6 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-full h-1.5 bg-indigo-500/40 rounded-sm" />
+                              <div className="w-10/12 h-1.5 bg-indigo-500/40 rounded-sm" />
+                            </div>
+                            {/* Right items */}
+                            <div className="flex-1 space-y-1.5">
+                              {[1, 2].map((idx) => (
+                                <div key={idx} className="space-y-0.75">
+                                  <div className="w-10 h-0.75 bg-indigo-500/35 rounded-sm" />
+                                  <div className="w-full h-0.5 bg-stone-800/20 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         ) : null}
 
                         {/* Subtle interactive '+' overlay indicator on Hover */}
@@ -389,13 +519,13 @@ export const Sidebar: React.FC = () => {
                 <div className="flex gap-2">
                   <button
                     onClick={() => moveComponent(selectedSectionId, selectedComponentId, "up")}
-                    className="flex-1 p-2 bg-neutral-800 hover:bg-neutral-700 rounded text-center flex justify-center items-center gap-1 text-xs"
+                    className="flex-1 p-2 bg-neutral-800 hover:bg-neutral-750 rounded text-center flex justify-center items-center gap-1 text-xs"
                   >
                     <ArrowUp className="w-3 h-3" /> Up
                   </button>
                   <button
                     onClick={() => moveComponent(selectedSectionId, selectedComponentId, "down")}
-                    className="flex-1 p-2 bg-neutral-800 hover:bg-neutral-700 rounded text-center flex justify-center items-center gap-1 text-xs"
+                    className="flex-1 p-2 bg-neutral-800 hover:bg-neutral-750 rounded text-center flex justify-center items-center gap-1 text-xs"
                   >
                     <ArrowDown className="w-3 h-3" /> Down
                   </button>

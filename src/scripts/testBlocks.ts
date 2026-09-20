@@ -41,8 +41,8 @@ function runBlockLibraryTests() {
   // Clear previous states
   mockLocalStorage.clear();
 
-  // 1. Registry Contains All 5 Blocks (Phase Expand Block Library complete)
-  assertEquals(starterBlocksRegistry.length, 5, "Blocks Registry contains exactly 5 blocks total");
+  // 1. Registry Contains All 12 Blocks (Phase Expand Block Library complete)
+  assertEquals(starterBlocksRegistry.length, 12, "Blocks Registry contains exactly 12 blocks total");
   
   const heroSplitDef = findBlockById("hero-editorial-split");
   assertEquals(heroSplitDef !== null, true, "Block Registry contains hero-editorial-split");
@@ -62,6 +62,29 @@ function runBlockLibraryTests() {
   const servicesThreeColumnDef = findBlockById("services-three-column");
   assertEquals(servicesThreeColumnDef !== null, true, "Block Registry contains services-three-column");
   assertEquals(servicesThreeColumnDef?.category, "Services", "Services Three Column categorized under Services");
+
+  // Verify Features Blocks are Registered
+  const f1Def = findBlockById("features-three-column");
+  assertEquals(f1Def !== null, true, "Block Registry contains features-three-column");
+  assertEquals(f1Def?.category, "Features", "features-three-column categorized under Features");
+
+  const f2Def = findBlockById("features-three-column-cards");
+  assertEquals(f2Def !== null, true, "Block Registry contains features-three-column-cards");
+
+  const f3Def = findBlockById("features-image-list");
+  assertEquals(f3Def !== null, true, "Block Registry contains features-image-list");
+
+  const f4Def = findBlockById("features-alternating");
+  assertEquals(f4Def !== null, true, "Block Registry contains features-alternating");
+
+  const f5Def = findBlockById("features-editorial-list");
+  assertEquals(f5Def !== null, true, "Block Registry contains features-editorial-list");
+
+  const f6Def = findBlockById("features-asymmetric-grid");
+  assertEquals(f6Def !== null, true, "Block Registry contains features-asymmetric-grid");
+
+  const f7Def = findBlockById("features-statement");
+  assertEquals(f7Def !== null, true, "Block Registry contains features-statement");
 
   // 2. Factory creates valid Section (Hero Centered)
   const sectionHeroCentered = heroCenteredDef!.createSection();
