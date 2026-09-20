@@ -1,6 +1,7 @@
 import React from "react";
 import { useBuilderStore } from "@/store/builderStore";
 import { findComponent } from "@/lib/treeUtils";
+import { starterThemesRegistry } from "@/lib/themesRegistry";
 import { Sliders, Paintbrush } from "lucide-react";
 
 export const PropertiesPanel: React.FC = () => {
@@ -12,6 +13,7 @@ export const PropertiesPanel: React.FC = () => {
     updateComponent,
     updateSection,
     updateTheme,
+    switchProjectTheme,
   } = useBuilderStore();
 
   const activePage = project?.pages.find((p) => p.id === activePageId);
@@ -73,6 +75,37 @@ export const PropertiesPanel: React.FC = () => {
         <p className="text-neutral-500 text-xs mb-4 leading-normal">
           Select any element on the canvas to edit its properties, or customize global styles below.
         </p>
+
+        {/* Dynamic Theme Selector (Phase Theme System) */}
+        <div className="space-y-2.5 mb-6 pb-6 border-b border-neutral-800">
+          <label className="block text-xs font-semibold text-neutral-400">Styling Theme</label>
+          <div className="space-y-2">
+            {starterThemesRegistry.map((theme) => {
+              const isActive = project.themeId === theme.id || (!project.themeId && theme.id === "editorial");
+              return (
+                <button
+                  key={theme.id}
+                  onClick={() => switchProjectTheme(theme.id)}
+                  className={`w-full p-3 rounded-lg text-left transition-all border flex flex-col gap-1.5 group ${
+                    isActive
+                      ? "bg-indigo-950/20 border-indigo-500 text-white"
+                      : "bg-neutral-850 border-neutral-800 hover:border-neutral-750 text-neutral-300 animate-none"
+                  }`}
+                >
+                  <div className="flex items-center justify-between w-full">
+                    <span className="font-bold text-xs group-hover:text-indigo-400 transition-colors">{theme.name}</span>
+                    <div className="flex gap-1 shrink-0">
+                      <span className="w-2.5 h-2.5 rounded-full border border-neutral-700" style={{ backgroundColor: theme.colors.background }} title="Page Background" />
+                      <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: theme.colors.primary }} title="Primary Theme Color" />
+                      <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: theme.colors.secondary }} title="Accent Action Color" />
+                    </div>
+                  </div>
+                  <span className="text-[10px] text-neutral-500 leading-normal font-medium">{theme.description}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
 
         <div className="space-y-4">
           <div>

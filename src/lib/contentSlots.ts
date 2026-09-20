@@ -139,8 +139,24 @@ export function populateProject(project: Project, content: UserContent): Project
   const page = populatedProject.pages[0]; // Populating home-page standard
   if (!page) return populatedProject;
 
-  // 2. Iterate through each explicit content slot
-  for (const slot of templateContentSlots) {
+  // Combine global template slots and local block-level section slots
+  const activeSlots = [...templateContentSlots];
+  for (const sec of page.sections) {
+    if (sec.contentSlots) {
+      for (const slot of sec.contentSlots) {
+        activeSlots.push({
+          slotId: `${sec.id}.${slot.componentId}`,
+          componentId: slot.componentId,
+          property: slot.property,
+          source: slot.source,
+          fallbackBehavior: "keep-template"
+        });
+      }
+    }
+  }
+
+  // 2. Iterate through each active content slot
+  for (const slot of activeSlots) {
     // 3. Resolve the user's content value
     const userValue = getValueByPath(content, slot.source);
 

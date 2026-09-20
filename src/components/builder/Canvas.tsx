@@ -56,6 +56,15 @@ export const Canvas: React.FC = () => {
           color: var(--text-color);
         }
 
+        .canvas-container h1,
+        .canvas-container h2,
+        .canvas-container h3,
+        .canvas-container h4,
+        .canvas-container h5,
+        .canvas-container h6 {
+          font-family: ${project.theme.typography.fontFamily.heading};
+        }
+
         /* ------------------------------------------------ */
         /* 1. Global Responsive Spacing Scales (Paddings)   */
         /* ------------------------------------------------ */

@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { Project, BuilderComponent, Section, Page, Theme, ProjectMetadata } from '@/types/builder';
 import { createDefaultProject } from '@/lib/defaultProject';
 import { starterTemplatesRegistry } from '@/lib/templatesRegistry';
+import { findBlockById } from '@/lib/blocksRegistry';
+import { findThemeById, mapDefinitionToTheme } from '@/lib/themesRegistry';
 import {
   updateComponentInArray,
   deleteComponentFromArray,
@@ -55,6 +57,12 @@ interface BuilderState {
   renameProject: (id: string, newName: string) => void;
   deleteProject: (id: string) => void;
   loadProjectById: (id: string) => void;
+
+  // Block Library Action (Phase Native Block)
+  addBlockToPage: (blockId: string) => void;
+
+  // Theme Library Action (Phase Theme System)
+  switchProjectTheme: (themeId: string) => void;
 
   // History Actions
   undo: () => void;
@@ -498,6 +506,49 @@ export const useBuilderStore = create<BuilderState>((set, get) => {
       });
 
       get().loadProjectsList();
+    },
+
+    // BLOCK LIBRARY ACTION (Phase Native Block)
+    // Deep clones block layout structure, creates unique component IDs, and inserts into page
+    addBlockToPage: (blockId) => {
+      const blockDef = findBlockById(blockId);
+      if (!blockDef) return;
+
+      const { project, activePageId } = get();
+      if (!project || !activePageId) return;
+
+      // Call the block's factory function which generates independent, fresh component IDs
+      const newBlockSection = blockDef.createSection();
+
+      const updatedProject = deepClone(project);
+      const page = updatedProject.pages.find((p) => p.id === activePageId);
+      if (!page) return;
+
+      // Append section into current page sections list
+      page.sections.push(newBlockSection);
+      
+      // Push history and auto-save
+      pushToHistory(updatedProject);
+      set({ selectedSectionId: newBlockSection.id, selectedComponentId: null });
+    },
+
+    // THEME LIBRARY ACTION (Phase Theme System)
+    // Synchronously, non-destructively switches design system tokens inside project settings
+    switchProjectTheme: (themeId) => {
+      const themeDef = findThemeById(themeId);
+      if (!themeDef) return;
+
+      const { project } = get();
+      if (!project) return;
+
+      const updatedProject = deepClone(project);
+      const mappedTheme = mapDefinitionToTheme(themeDef);
+
+      // Mutate the visual tokens object and metadata tag cleanly without harming any page content nodes
+      updatedProject.theme = mappedTheme;
+      updatedProject.themeId = themeId;
+
+      pushToHistory(updatedProject);
     },
 
     // UNDO / REDO

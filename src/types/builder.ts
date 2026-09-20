@@ -50,12 +50,20 @@ export interface BuilderComponent {
   children?: BuilderComponent[];
 }
 
+export interface SectionSlotMapping {
+  componentId: string;
+  property: string;
+  source: string;
+}
+
 export interface Section {
   id: string;
   name: string;
   type: string; // e.g., 'Hero', 'Services', 'Footer'
   components: BuilderComponent[];
   styles: Record<string, any>;
+  blockId?: string; // Optional indicator of block library origin
+  contentSlots?: SectionSlotMapping[]; // Optional local slot definitions for dynamic population
 }
 
 export interface Page {
@@ -69,6 +77,7 @@ export interface Project {
   id: string;
   name: string;
   theme: Theme;
+  themeId?: string; // Optional indicator of active token-based Theme ID
   pages: Page[];
   createdAt: number;
   updatedAt: number;
@@ -90,4 +99,11 @@ export interface ProjectMetadata {
   updatedAt: number;
 }
 
-
+export interface BlockDefinition {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+  previewImage?: string;
+  createSection: () => Section;
+}

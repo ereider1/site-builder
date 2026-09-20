@@ -1,7 +1,8 @@
 import React from "react";
 import { useBuilderStore } from "@/store/builderStore";
 import { Section, BuilderComponent, ComponentType } from "@/types/builder";
-import { ArrowUp, ArrowDown, Trash2, Plus, LayoutGrid, FileText } from "lucide-react";
+import { starterBlocksRegistry } from "@/lib/blocksRegistry";
+import { ArrowUp, ArrowDown, Trash2, Plus, LayoutGrid, FileText, Sparkles } from "lucide-react";
 
 export const Sidebar: React.FC = () => {
   const {
@@ -17,6 +18,7 @@ export const Sidebar: React.FC = () => {
     addComponent,
     deleteComponent,
     moveComponent,
+    addBlockToPage,
   } = useBuilderStore();
 
   const activePage = project?.pages.find((p) => p.id === activePageId);
@@ -33,7 +35,7 @@ export const Sidebar: React.FC = () => {
 
     if (type === "Hero") {
       name = "Hero Section";
-      background = "#f3f4f6";
+      background = "#fcfcf9";
       components = [
         {
           id: generateId("comp-container"),
@@ -304,7 +306,30 @@ export const Sidebar: React.FC = () => {
         )}
       </div>
 
-      {/* 2. Add Section Presets */}
+      {/* 2. Block Library Section (Phase Block Library) */}
+      <div className="p-4 border-b border-neutral-800 bg-neutral-900/50">
+        <h3 className="font-semibold text-xs uppercase tracking-wider text-indigo-400 mb-3 flex items-center gap-1.5 select-none">
+          <Sparkles className="w-3.5 h-3.5" />
+          Block Library
+        </h3>
+        <div className="space-y-2">
+          {starterBlocksRegistry.map((block) => (
+            <button
+              key={block.id}
+              onClick={() => addBlockToPage(block.id)}
+              className="w-full p-3 bg-neutral-850 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-750 rounded-lg text-left transition-all duration-200 flex items-start gap-2.5 group"
+            >
+              <LayoutGrid className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5 group-hover:scale-105 transition-transform" />
+              <div className="space-y-0.5">
+                <span className="block text-white font-bold text-xs">{block.name}</span>
+                <span className="block text-[10px] text-neutral-500 leading-normal font-medium">{block.description}</span>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 2.5 Add Section Presets */}
       <div className="p-4 border-b border-neutral-800">
         <h3 className="font-semibold text-xs uppercase tracking-wider text-neutral-400 mb-3 flex items-center gap-1.5">
           <Plus className="w-3.5 h-3.5" />
