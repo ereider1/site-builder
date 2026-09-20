@@ -18,22 +18,31 @@ import { createContentSplitEditorialBlock } from "./blocks/contentSplitEditorial
 import { createContentImageTextBlock } from "./blocks/contentImageText";
 import { createContentQuoteImageBlock } from "./blocks/contentQuoteImage";
 import { createContentFeaturedStoriesBlock } from "./blocks/contentFeaturedStories";
-
-// 5 New Team Blocks
 import { createTeamFourColumnBlock } from "./blocks/teamFourColumn";
 import { createTeamImageBioRowsBlock } from "./blocks/teamImageBioRows";
 import { createTeamEightGridBlock } from "./blocks/teamEightGrid";
 import { createTeamFeaturedBlock } from "./blocks/teamFeatured";
 import { createTeamEditorialListBlock } from "./blocks/teamEditorialList";
-
-// 5 New Testimonial Blocks
 import { createTestimonialTwoColumnBlock } from "./blocks/testimonialTwoColumn";
 import { createTestimonialLargeQuoteBlock } from "./blocks/testimonialLargeQuote";
 import { createTestimonialThreeColumnBlock } from "./blocks/testimonialThreeColumn";
 import { createTestimonialQuoteImageBlock } from "./blocks/testimonialQuoteImage";
 import { createTestimonialEditorialListBlock } from "./blocks/testimonialEditorialList";
 
+// Reusable mobile navigation test block
+import { createNavigationMinimalBlock } from "./blocks/navigationMinimal";
+
 export const starterBlocksRegistry: BlockDefinition[] = [
+  // 0. HEADER CATEGORY (Phase Responsive Navigation foundation)
+  {
+    id: "navigation-minimal",
+    name: "Navigation — Minimal",
+    category: "HEADER", // Standard uppercase taxonomy
+    description: "A gorgeous, responsive minimal header layout housing an editable logo, responsive menu links, and a primary CTA button.",
+    previewImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=400&q=80",
+    createSection: createNavigationMinimalBlock,
+  },
+
   // 1. HERO CATEGORY
   {
     id: "hero-editorial-split",
@@ -194,7 +203,7 @@ export const starterBlocksRegistry: BlockDefinition[] = [
     createSection: createContentFeaturedStoriesBlock,
   },
 
-  // 5. TEAM CATEGORY (Phase Team complete)
+  // 5. TEAM CATEGORY
   {
     id: "team-four-column",
     name: "Team — Four Column",
@@ -236,7 +245,7 @@ export const starterBlocksRegistry: BlockDefinition[] = [
     createSection: createTeamEditorialListBlock,
   },
 
-  // 6. TESTIMONIAL CATEGORY (Phase Testimonial complete)
+  // 6. TESTIMONIAL CATEGORY
   {
     id: "testimonial-two-column",
     name: "Testimonial — Two Column",

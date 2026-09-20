@@ -41,9 +41,13 @@ function runBlockLibraryTests() {
   // Clear previous states
   mockLocalStorage.clear();
 
-  // 1. Registry Contains All 29 Blocks (Phase Team & Testimonial complete)
-  assertEquals(starterBlocksRegistry.length, 29, "Blocks Registry contains exactly 29 blocks total");
+  // 1. Registry Contains All 30 Blocks (Phase Navigation Foundation complete)
+  assertEquals(starterBlocksRegistry.length, 30, "Blocks Registry contains exactly 30 blocks total");
   
+  const navMinimalDef = findBlockById("navigation-minimal");
+  assertEquals(navMinimalDef !== null, true, "Block Registry contains navigation-minimal");
+  assertEquals(navMinimalDef?.category, "HEADER", "navigation-minimal categorized under HEADER");
+
   const heroSplitDef = findBlockById("hero-editorial-split");
   assertEquals(heroSplitDef !== null, true, "Block Registry contains hero-editorial-split");
   

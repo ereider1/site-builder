@@ -222,7 +222,20 @@ export const Sidebar: React.FC = () => {
                       <div className="w-full aspect-[16/10] bg-neutral-950 border border-neutral-800 rounded-md p-3.5 flex gap-3.5 overflow-hidden relative transition-colors group-hover:border-indigo-500/40 select-none">
                         
                         {/* Render customized high-fidelity CSS miniature vector drawings depending on the blockId */}
-                        {block.id === "hero-editorial-split" ? (
+                        {block.id === "navigation-minimal" ? (
+                          <div className="w-full flex justify-between items-center py-2 px-1.5 z-10 h-full">
+                            {/* Left: Logo line */}
+                            <div className="w-12 h-1.5 bg-indigo-500/40 rounded-sm shrink-0" />
+                            {/* Center: Nav links lines */}
+                            <div className="flex gap-1.5 items-center">
+                              <div className="w-3.5 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-3.5 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-3.5 h-0.75 bg-stone-700/50 rounded-full" />
+                            </div>
+                            {/* Right: CTA Button */}
+                            <div className="w-8 h-2 bg-indigo-500/25 border border-indigo-500/10 rounded-sm shrink-0" />
+                          </div>
+                        ) : block.id === "hero-editorial-split" ? (
                           <>
                             {/* Left column: Miniature editorial typography lines */}
                             <div className="flex-1 flex flex-col justify-center gap-1.5 z-10">

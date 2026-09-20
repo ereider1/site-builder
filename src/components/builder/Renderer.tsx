@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BuilderComponent, Section } from "@/types/builder";
 import { useBuilderStore } from "@/store/builderStore";
 import { cn } from "@/lib/utils";
@@ -50,6 +50,47 @@ export const getResponsiveFontSize = (fontSize: string | undefined): string | un
 export const NavLinksRenderer: React.FC<{ links: Array<{ label: string; href: string }> }> = ({ links }) => {
   const [isOpen, setIsOpen] = useState(false);
 
+  // Resize listener: close menu deterministically if resizing past tablet/desktop width (768px)
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // Keyboard accessibility: Escape key closes active mobile drawer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isOpen) {
+        setIsOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  // Prevent unwanted background scrolling on preview container (isolated from Editor UI!)
+  useEffect(() => {
+    const scrollContainer = document.querySelector(".canvas-container")?.parentElement;
+    if (isOpen) {
+      if (scrollContainer) {
+        scrollContainer.style.overflowY = "hidden";
+      }
+    } else {
+      if (scrollContainer) {
+        scrollContainer.style.overflowY = "auto";
+      }
+    }
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.style.overflowY = "auto";
+      }
+    };
+  }, [isOpen]);
+
   return (
     <>
       {/* Desktop/Tablet Horizontal Links (>=768px) */}
@@ -71,25 +112,41 @@ export const NavLinksRenderer: React.FC<{ links: Array<{ label: string; href: st
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-1.5 text-stone-500 hover:text-stone-900 focus:outline-none transition-colors"
-          aria-label="Toggle Navigation Menu"
+          aria-expanded={isOpen}
+          aria-controls="mobile-nav-drawer"
+          aria-label={isOpen ? "Close Navigation Menu" : "Open Navigation Menu"}
         >
           {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
-      {/* Mobile Expanded Drawer Panel */}
+      {/* Mobile Expanded Drawer Panel - Theme Token Aware & Fully Accessible */}
       {isOpen && (
-        <div className="absolute top-14 left-0 right-0 bg-white border-b border-stone-200 shadow-xl p-6 flex flex-col gap-4 text-xs font-semibold uppercase tracking-widest text-stone-500 z-50 animate-fadeIn md:hidden">
-          {links.map((link, idx) => (
-            <a
-              key={idx}
-              href={link.href}
-              className="hover:text-stone-900 py-2 transition-colors border-b border-stone-50"
-              onClick={() => setIsOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
+        <div
+          id="mobile-nav-drawer"
+          className="absolute top-14 left-0 right-0 p-6 flex flex-col gap-4 text-xs font-semibold uppercase tracking-widest z-50 animate-fadeIn md:hidden shadow-xl"
+          style={{
+            background: "var(--background-color)",
+            borderBottom: "1px solid var(--border-color)",
+            color: "var(--text-color)"
+          }}
+        >
+          <nav aria-label="Mobile Navigation" className="flex flex-col gap-4">
+            {links.map((link, idx) => (
+              <a
+                key={idx}
+                href={link.href}
+                className="py-2.5 transition-colors"
+                style={{
+                  borderBottom: "1px solid var(--border-color)",
+                  color: "var(--text-color)"
+                }}
+                onClick={() => setIsOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
         </div>
       )}
     </>
