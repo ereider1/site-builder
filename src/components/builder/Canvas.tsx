@@ -116,9 +116,21 @@ export const Canvas: React.FC = () => {
           flex-direction: column !important; /* Force vertical flex columns */
         }
         
-        /* Exclude mobile Hamburger trigger from flex vertical stacking */
+        /* Force mobile navigation toggles inside mobile editor viewport parent on desktop screens */
+        .viewport-mobile .hidden.md\\:flex {
+          display: none !important;
+        }
         .viewport-mobile .md\\:hidden.flex {
+          display: flex !important;
           flex-direction: row !important;
+        }
+        .viewport-mobile .md\\:hidden {
+          display: block !important;
+        }
+
+        /* Break out mobile navigation drawer from nested component relative parent trapping */
+        .viewport-mobile [id^="sec-nav"] .group\\/comp {
+          position: static !important;
         }
 
         .viewport-mobile .justify-between {

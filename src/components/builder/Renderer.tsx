@@ -427,6 +427,7 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
 
   return (
     <section
+      id={section.id}
       onClick={handleClick}
       className={cn(
         "relative transition-all w-full",
