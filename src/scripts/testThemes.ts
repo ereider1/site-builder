@@ -51,7 +51,7 @@ function runThemeSystemTests() {
   store.initialize();
   
   const originalProject = useBuilderStore.getState().project!;
-  assertEquals(originalProject.themeId, undefined, "Initial project starts with undefined/default theme ID");
+  assertEquals(originalProject.themeId, "editorial", "Initial project starts with editorial theme ID");
 
   // Store original IDs for non-destructive check
   const originalSectionId = originalProject.pages[0].sections[1].id;

@@ -3,16 +3,16 @@ import { Project, Theme } from "@/types/builder";
 export const defaultTheme: Theme = {
   colors: {
     primary: "#111111", // Pitch charcoal
-    secondary: "#111111", // Elegant dark accent
+    secondary: "#111111", // Muted anthracite
     background: "#fcfcf9", // Premium warm paper white
     surface: "#ffffff",
-    text: "#1c1917", // Stone anthracite body text
+    text: "#1c1917", // Stone anthracite text
     muted: "#78716c", // Stone gray
     border: "#e7e5e4", // Clean warm gray border
   },
   typography: {
     fontFamily: {
-      heading: "Inter, sans-serif",
+      heading: "'Playfair Display', Georgia, serif",
       body: "Inter, sans-serif",
     },
     scale: {
@@ -31,8 +31,9 @@ export const defaultTheme: Theme = {
 
 export const createDefaultProject = (): Project => {
   return {
-    id: "northstar-studio-project",
+    id: "northstar-studio-v2", // Force load clean art-directed layout
     name: "Northstar Studio — Professional Services",
+    themeId: "editorial", // Default theme is Editorial
     createdAt: Date.now(),
     updatedAt: Date.now(),
     theme: defaultTheme,
@@ -45,13 +46,13 @@ export const createDefaultProject = (): Project => {
           // 1. Navigation (Header)
           {
             id: "sec-nav",
-            name: "Navigation",
+            name: "01 — Header Navigation",
             type: "Navigation",
             styles: {
-              background: "#fcfcf9",
+              background: "var(--background-color)",
               paddingTop: "1.5rem",
               paddingBottom: "1.5rem",
-              borderBottom: "1px solid #e7e5e4",
+              borderBottom: "1px solid var(--border-color)",
             },
             components: [
               {
@@ -64,7 +65,7 @@ export const createDefaultProject = (): Project => {
                     id: "comp-nav-logo",
                     type: "Logo",
                     props: { text: "NORTHSTAR STUDIO" },
-                    styles: { fontSize: "0.875rem", fontWeight: "700", color: "#111111", letterSpacing: "0.05em" },
+                    styles: { fontSize: "0.875rem", fontWeight: "700", color: "var(--text-color)", letterSpacing: "0.05em" },
                   },
                   {
                     id: "comp-nav-links",
@@ -83,7 +84,7 @@ export const createDefaultProject = (): Project => {
                     id: "comp-nav-btn",
                     type: "Button",
                     props: { label: "Start Conversation", variant: "secondary", link: "#cta" },
-                    styles: { borderRadius: "0px", color: "#111111", fontSize: "0.75rem", letterSpacing: "0.05em" },
+                    styles: { borderRadius: "var(--border-radius)", color: "var(--text-color)", fontSize: "0.75rem", letterSpacing: "0.05em" },
                   },
                 ],
               },
@@ -92,10 +93,10 @@ export const createDefaultProject = (): Project => {
           // 2. Hero Section
           {
             id: "sec-hero",
-            name: "Hero",
+            name: "02 — Hero Studio Header",
             type: "Hero",
             styles: {
-              background: "#fcfcf9",
+              background: "var(--background-color)",
               paddingTop: "8rem",
               paddingBottom: "8rem",
             },
@@ -116,19 +117,19 @@ export const createDefaultProject = (): Project => {
                         id: "comp-hero-eyebrow",
                         type: "Text",
                         props: { text: "INDEPENDENT CONSULTING" },
-                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "#78716c", letterSpacing: "0.1em", textTransform: "uppercase" },
+                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "var(--muted-color)", letterSpacing: "0.1em", textTransform: "uppercase" },
                       },
                       {
                         id: "comp-hero-heading",
                         type: "Heading",
                         props: { text: "Build a business ready for what comes next.", level: "h1" },
-                        styles: { fontSize: "4.5rem", lineHeight: "1.05", fontWeight: "500", color: "#111111", letterSpacing: "-0.02em" },
+                        styles: { fontSize: "4.5rem", lineHeight: "1.05", fontWeight: "500", color: "var(--text-color)", letterSpacing: "-0.02em" },
                       },
                       {
                         id: "comp-hero-text",
                         type: "Text",
                         props: { text: "We help ambitious companies clarify their direction, strengthen their digital presence, and build systems that scale." },
-                        styles: { fontSize: "1.25rem", color: "#78716c", lineHeight: "1.6" },
+                        styles: { fontSize: "1.25rem", color: "var(--muted-color)", lineHeight: "1.6" },
                       },
                       {
                         id: "comp-hero-btn-container",
@@ -140,13 +141,13 @@ export const createDefaultProject = (): Project => {
                             id: "comp-hero-btn-primary",
                             type: "Button",
                             props: { label: "Connect with us", variant: "primary", link: "#cta" },
-                            styles: { background: "#111111", color: "#ffffff", borderRadius: "0px", fontSize: "0.75rem", letterSpacing: "0.05em" },
+                            styles: { background: "var(--primary-color)", color: "var(--surface-color)", borderRadius: "var(--border-radius)", fontSize: "0.75rem", letterSpacing: "0.05em" },
                           },
                           {
                             id: "comp-hero-btn-secondary",
                             type: "Button",
                             props: { label: "Our capabilities", variant: "secondary", link: "#services" },
-                            styles: { color: "#111111", borderRadius: "0px", fontSize: "0.75rem", letterSpacing: "0.05em" },
+                            styles: { color: "var(--text-color)", borderRadius: "var(--border-radius)", fontSize: "0.75rem", letterSpacing: "0.05em" },
                           },
                         ],
                       },
@@ -167,7 +168,7 @@ export const createDefaultProject = (): Project => {
                           objectFit: "cover",
                           aspectRatio: "3/4",
                         },
-                        styles: { borderRadius: "0px" },
+                        styles: { borderRadius: "var(--border-radius)" },
                       },
                     ],
                   },
@@ -178,14 +179,14 @@ export const createDefaultProject = (): Project => {
           // 3. Trust / Introduction
           {
             id: "sec-trust",
-            name: "Philosophy",
+            name: "03 — Core Philosophy",
             type: "Trust",
             styles: {
-              background: "#ffffff",
+              background: "var(--surface-color)",
               paddingTop: "10rem",
               paddingBottom: "10rem",
-              borderBottom: "1px solid #e7e5e4",
-              borderTop: "1px solid #e7e5e4",
+              borderBottom: "1px solid var(--border-color)",
+              borderTop: "1px solid var(--border-color)",
             },
             components: [
               {
@@ -198,7 +199,7 @@ export const createDefaultProject = (): Project => {
                     id: "comp-trust-left",
                     type: "Text",
                     props: { text: "OUR BELIEF" },
-                    styles: { fontSize: "0.75rem", fontWeight: "600", color: "#78716c", letterSpacing: "0.1em", textTransform: "uppercase" },
+                    styles: { fontSize: "0.75rem", fontWeight: "600", color: "var(--muted-color)", letterSpacing: "0.1em", textTransform: "uppercase" },
                   },
                   {
                     id: "comp-trust-right",
@@ -210,7 +211,7 @@ export const createDefaultProject = (): Project => {
                         id: "comp-trust-quote",
                         type: "Heading",
                         props: { text: "We believe the future belongs to companies that can navigate complexity with clarity and absolute intent.", level: "h2" },
-                        styles: { fontSize: "3rem", fontWeight: "400", lineHeight: "1.2", color: "#111111", letterSpacing: "-0.01em" },
+                        styles: { fontSize: "3rem", fontWeight: "400", lineHeight: "1.2", color: "var(--text-color)", letterSpacing: "-0.01em" },
                       },
                     ],
                   },
@@ -221,10 +222,10 @@ export const createDefaultProject = (): Project => {
           // 4. Services
           {
             id: "sec-services",
-            name: "Services",
+            name: "04 — Core Practices",
             type: "Services",
             styles: {
-              background: "#fcfcf9",
+              background: "var(--background-color)",
               paddingTop: "8rem",
               paddingBottom: "8rem",
             },
@@ -245,13 +246,13 @@ export const createDefaultProject = (): Project => {
                         id: "comp-services-eyebrow",
                         type: "Text",
                         props: { text: "CAPABILITIES" },
-                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "#78716c", letterSpacing: "0.1em", textTransform: "uppercase" },
+                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "var(--muted-color)", letterSpacing: "0.1em", textTransform: "uppercase" },
                       },
                       {
                         id: "comp-services-heading",
                         type: "Heading",
                         props: { text: "Our Practices", level: "h2" },
-                        styles: { fontSize: "2.5rem", fontWeight: "500", color: "#111111", letterSpacing: "-0.01em" },
+                        styles: { fontSize: "2.5rem", fontWeight: "500", color: "var(--text-color)", letterSpacing: "-0.01em" },
                       },
                     ],
                   },
@@ -266,25 +267,25 @@ export const createDefaultProject = (): Project => {
                         id: "comp-practice-1",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.75rem" },
-                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "2rem", paddingBottom: "2rem" },
+                        styles: { borderTop: "1px solid var(--border-color)", paddingTop: "2rem", paddingBottom: "2rem" },
                         children: [
                           {
                             id: "comp-p1-num",
                             type: "Text",
                             props: { text: "01" },
-                            styles: { fontSize: "0.75rem", color: "#78716c", letterSpacing: "0.05em", fontWeight: "600" },
+                            styles: { fontSize: "0.75rem", color: "var(--muted-color)", letterSpacing: "0.05em", fontWeight: "600" },
                           },
                           {
                             id: "comp-p1-title",
                             type: "Heading",
                             props: { text: "STRATEGY", level: "h3" },
-                            styles: { fontSize: "1.25rem", fontWeight: "600", color: "#111111", letterSpacing: "0.05em" },
+                            styles: { fontSize: "1.25rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.05em" },
                           },
                           {
                             id: "comp-p1-desc",
                             type: "Text",
                             props: { text: "Turn complex challenges into clear, actionable direction." },
-                            styles: { fontSize: "1rem", color: "#78716c", marginTop: "0.5rem" },
+                            styles: { fontSize: "1rem", color: "var(--muted-color)", marginTop: "0.5rem" },
                           },
                         ],
                       },
@@ -293,25 +294,25 @@ export const createDefaultProject = (): Project => {
                         id: "comp-practice-2",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.75rem" },
-                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "2rem", paddingBottom: "2rem" },
+                        styles: { borderTop: "1px solid var(--border-color)", paddingTop: "2rem", paddingBottom: "2rem" },
                         children: [
                           {
                             id: "comp-p2-num",
                             type: "Text",
                             props: { text: "02" },
-                            styles: { fontSize: "0.75rem", color: "#78716c", letterSpacing: "0.05em", fontWeight: "600" },
+                            styles: { fontSize: "0.75rem", color: "var(--muted-color)", letterSpacing: "0.05em", fontWeight: "600" },
                           },
                           {
                             id: "comp-p2-title",
                             type: "Heading",
                             props: { text: "DIGITAL EXPERIENCES", level: "h3" },
-                            styles: { fontSize: "1.25rem", fontWeight: "600", color: "#111111", letterSpacing: "0.05em" },
+                            styles: { fontSize: "1.25rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.05em" },
                           },
                           {
                             id: "comp-p2-desc",
                             type: "Text",
                             props: { text: "Create thoughtful digital experiences that move people to action." },
-                            styles: { fontSize: "1rem", color: "#78716c", marginTop: "0.5rem" },
+                            styles: { fontSize: "1rem", color: "var(--muted-color)", marginTop: "0.5rem" },
                           },
                         ],
                       },
@@ -320,25 +321,25 @@ export const createDefaultProject = (): Project => {
                         id: "comp-practice-3",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.75rem" },
-                        styles: { borderTop: "1px solid #e7e5e4", paddingTop: "2rem", paddingBottom: "2rem", borderBottom: "1px solid #e7e5e4" },
+                        styles: { borderTop: "1px solid var(--border-color)", paddingTop: "2rem", paddingBottom: "2rem", borderBottom: "1px solid var(--border-color)" },
                         children: [
                           {
                             id: "comp-p3-num",
                             type: "Text",
                             props: { text: "03" },
-                            styles: { fontSize: "0.75rem", color: "#78716c", letterSpacing: "0.05em", fontWeight: "600" },
+                            styles: { fontSize: "0.75rem", color: "var(--muted-color)", letterSpacing: "0.05em", fontWeight: "600" },
                           },
                           {
                             id: "comp-p3-title",
                             type: "Heading",
                             props: { text: "CREATIVE DIRECTION", level: "h3" },
-                            styles: { fontSize: "1.25rem", fontWeight: "600", color: "#111111", letterSpacing: "0.05em" },
+                            styles: { fontSize: "1.25rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.05em" },
                           },
                           {
                             id: "comp-p3-desc",
                             type: "Text",
                             props: { text: "Bring your brand, content, and customer experience together." },
-                            styles: { fontSize: "1rem", color: "#78716c", marginTop: "0.5rem" },
+                            styles: { fontSize: "1rem", color: "var(--muted-color)", marginTop: "0.5rem" },
                           },
                         ],
                       },
@@ -351,10 +352,10 @@ export const createDefaultProject = (): Project => {
           // 5. About
           {
             id: "sec-about",
-            name: "About",
+            name: "05 — About Corporate Manifesto",
             type: "About",
             styles: {
-              background: "#ffffff",
+              background: "var(--surface-color)",
               paddingTop: "8rem",
               paddingBottom: "8rem",
             },
@@ -380,7 +381,7 @@ export const createDefaultProject = (): Project => {
                           objectFit: "cover",
                           aspectRatio: "4/5",
                         },
-                        styles: { borderRadius: "0px" },
+                        styles: { borderRadius: "var(--border-radius)" },
                       },
                     ],
                   },
@@ -394,13 +395,13 @@ export const createDefaultProject = (): Project => {
                         id: "comp-about-eyebrow",
                         type: "Text",
                         props: { text: "WHO WE ARE" },
-                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "#78716c", letterSpacing: "0.1em", textTransform: "uppercase" },
+                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "var(--muted-color)", letterSpacing: "0.1em", textTransform: "uppercase" },
                       },
                       {
                         id: "comp-about-heading",
                         type: "Heading",
                         props: { text: "We combine strategic thinking, thoughtful design, and modern technology to help growing businesses move forward with confidence.", level: "h2" },
-                        styles: { fontSize: "2rem", fontWeight: "400", color: "#111111", lineHeight: "1.4", letterSpacing: "-0.01em" },
+                        styles: { fontSize: "2rem", fontWeight: "400", color: "var(--text-color)", lineHeight: "1.4", letterSpacing: "-0.01em" },
                       },
                     ],
                   },
@@ -411,13 +412,13 @@ export const createDefaultProject = (): Project => {
           // 6. Process
           {
             id: "sec-process",
-            name: "Process",
+            name: "06 — Dynamic Process Methodology",
             type: "Process",
             styles: {
-              background: "#fcfcf9",
+              background: "var(--background-color)",
               paddingTop: "8rem",
               paddingBottom: "8rem",
-              borderTop: "1px solid #e7e5e4",
+              borderTop: "1px solid var(--border-color)",
             },
             components: [
               {
@@ -436,13 +437,13 @@ export const createDefaultProject = (): Project => {
                         id: "comp-process-eyebrow",
                         type: "Text",
                         props: { text: "OUR METHODOLOGY" },
-                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "#78716c", letterSpacing: "0.1em", textTransform: "uppercase" },
+                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "var(--muted-color)", letterSpacing: "0.1em", textTransform: "uppercase" },
                       },
                       {
                         id: "comp-process-heading",
                         type: "Heading",
                         props: { text: "Process", level: "h2" },
-                        styles: { fontSize: "2.5rem", fontWeight: "500", color: "#111111", letterSpacing: "-0.01em" },
+                        styles: { fontSize: "2.5rem", fontWeight: "500", color: "var(--text-color)", letterSpacing: "-0.01em" },
                       },
                     ],
                   },
@@ -457,19 +458,19 @@ export const createDefaultProject = (): Project => {
                         id: "comp-step-1",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.5rem" },
-                        styles: { borderTop: "1px solid #111111", paddingTop: "1.5rem" },
+                        styles: { borderTop: "1px solid var(--text-color)", paddingTop: "1.5rem" },
                         children: [
                           {
                             id: "comp-step1-title",
                             type: "Heading",
                             props: { text: "01 — Discover", level: "h3" },
-                            styles: { fontSize: "1rem", fontWeight: "600", color: "#111111", letterSpacing: "0.05em", textTransform: "uppercase" },
+                            styles: { fontSize: "1rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.05em", textTransform: "uppercase" },
                           },
                           {
                             id: "comp-step1-desc",
                             type: "Text",
                             props: { text: "Understand the challenge, opportunity, audience, and goals." },
-                            styles: { fontSize: "1rem", color: "#78716c", marginTop: "0.25rem" },
+                            styles: { fontSize: "1rem", color: "var(--muted-color)", marginTop: "0.25rem" },
                           },
                         ],
                       },
@@ -478,19 +479,19 @@ export const createDefaultProject = (): Project => {
                         id: "comp-step-2",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.5rem" },
-                        styles: { borderTop: "1px solid #111111", paddingTop: "1.5rem" },
+                        styles: { borderTop: "1px solid var(--text-color)", paddingTop: "1.5rem" },
                         children: [
                           {
                             id: "comp-step2-title",
                             type: "Heading",
                             props: { text: "02 — Define", level: "h3" },
-                            styles: { fontSize: "1rem", fontWeight: "600", color: "#111111", letterSpacing: "0.05em", textTransform: "uppercase" },
+                            styles: { fontSize: "1rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.05em", textTransform: "uppercase" },
                           },
                           {
                             id: "comp-step2-desc",
                             type: "Text",
                             props: { text: "Turn insight into a clear strategic direction." },
-                            styles: { fontSize: "1rem", color: "#78716c", marginTop: "0.25rem" },
+                            styles: { fontSize: "1rem", color: "var(--muted-color)", marginTop: "0.25rem" },
                           },
                         ],
                       },
@@ -499,19 +500,19 @@ export const createDefaultProject = (): Project => {
                         id: "comp-step-3",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.5rem" },
-                        styles: { borderTop: "1px solid #111111", paddingTop: "1.5rem" },
+                        styles: { borderTop: "1px solid var(--text-color)", paddingTop: "1.5rem" },
                         children: [
                           {
                             id: "comp-step3-title",
                             type: "Heading",
                             props: { text: "03 — Create", level: "h3" },
-                            styles: { fontSize: "1rem", fontWeight: "600", color: "#111111", letterSpacing: "0.05em", textTransform: "uppercase" },
+                            styles: { fontSize: "1rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.05em", textTransform: "uppercase" },
                           },
                           {
                             id: "comp-step3-desc",
                             type: "Text",
                             props: { text: "Build the experience, system, or solution." },
-                            styles: { fontSize: "1rem", color: "#78716c", marginTop: "0.25rem" },
+                            styles: { fontSize: "1rem", color: "var(--muted-color)", marginTop: "0.25rem" },
                           },
                         ],
                       },
@@ -520,19 +521,19 @@ export const createDefaultProject = (): Project => {
                         id: "comp-step-4",
                         type: "Container",
                         props: { layout: "flex-col", gap: "0.5rem" },
-                        styles: { borderTop: "1px solid #111111", paddingTop: "1.5rem" },
+                        styles: { borderTop: "1px solid var(--text-color)", paddingTop: "1.5rem" },
                         children: [
                           {
                             id: "comp-step4-title",
                             type: "Heading",
                             props: { text: "04 — Refine", level: "h3" },
-                            styles: { fontSize: "1rem", fontWeight: "600", color: "#111111", letterSpacing: "0.05em", textTransform: "uppercase" },
+                            styles: { fontSize: "1rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.05em", textTransform: "uppercase" },
                           },
                           {
                             id: "comp-step4-desc",
                             type: "Text",
                             props: { text: "Test, improve, and prepare everything for launch." },
-                            styles: { fontSize: "1rem", color: "#78716c", marginTop: "0.25rem" },
+                            styles: { fontSize: "1rem", color: "var(--muted-color)", marginTop: "0.25rem" },
                           },
                         ],
                       },
@@ -545,10 +546,10 @@ export const createDefaultProject = (): Project => {
           // 7. Featured Work
           {
             id: "sec-work",
-            name: "Featured Work",
+            name: "07 — Selected Featured Project",
             type: "Featured Work",
             styles: {
-              background: "#ffffff",
+              background: "var(--surface-color)",
               paddingTop: "8rem",
               paddingBottom: "8rem",
             },
@@ -568,7 +569,7 @@ export const createDefaultProject = (): Project => {
                       objectFit: "cover",
                       aspectRatio: "16/9",
                     },
-                    styles: { borderRadius: "0px" },
+                    styles: { borderRadius: "var(--border-radius)" },
                   },
                   {
                     id: "comp-work-desc",
@@ -580,13 +581,13 @@ export const createDefaultProject = (): Project => {
                         id: "comp-work-desc-left",
                         type: "Heading",
                         props: { text: "THE NEW STANDARD", level: "h3" },
-                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "#111111", letterSpacing: "0.1em", textTransform: "uppercase" },
+                        styles: { fontSize: "0.75rem", fontWeight: "600", color: "var(--text-color)", letterSpacing: "0.1em", textTransform: "uppercase" },
                       },
                       {
                         id: "comp-work-desc-right",
                         type: "Text",
                         props: { text: "Sustainable design strategy" },
-                        styles: { fontSize: "1.5rem", color: "#111111", fontWeight: "400", letterSpacing: "-0.01em" },
+                        styles: { fontSize: "1.5rem", color: "var(--text-color)", fontWeight: "400", letterSpacing: "-0.01em" },
                       },
                     ],
                   },
@@ -597,10 +598,10 @@ export const createDefaultProject = (): Project => {
           // 8. Testimonial
           {
             id: "sec-testimonial",
-            name: "Testimonial",
+            name: "08 — Client Quote",
             type: "Testimonial",
             styles: {
-              background: "#fcfcf9",
+              background: "var(--background-color)",
               paddingTop: "12rem",
               paddingBottom: "12rem",
             },
@@ -615,25 +616,25 @@ export const createDefaultProject = (): Project => {
                     id: "comp-testimonial-quote",
                     type: "Heading",
                     props: { text: "\"Northstar helped us turn a complicated business challenge into a clear and actionable plan.\"", level: "h2" },
-                    styles: { fontSize: "2.5rem", fontWeight: "400", lineHeight: "1.3", color: "#111111", letterSpacing: "-0.01em", textAlign: "center" },
+                    styles: { fontSize: "2.5rem", fontWeight: "400", lineHeight: "1.3", color: "var(--text-color)", letterSpacing: "-0.01em", textAlign: "center" },
                   },
                   {
                     id: "comp-testimonial-author",
                     type: "Text",
                     props: { text: "— Maya Chen, Founder" },
-                    styles: { fontSize: "0.75rem", fontWeight: "600", color: "#78716c", letterSpacing: "0.1em", textTransform: "uppercase", textAlign: "center" },
+                    styles: { fontSize: "0.75rem", fontWeight: "600", color: "var(--muted-color)", letterSpacing: "0.1em", textTransform: "uppercase", textAlign: "center" },
                   },
                 ],
               },
             ],
           },
-          // 9. CTA
+          // 9. CTA (Call To Action)
           {
             id: "sec-cta",
-            name: "CTA",
+            name: "09 — Primary CTA",
             type: "CTA",
             styles: {
-              background: "#111111", // Pitch black
+              background: "var(--primary-color)", // Pitch black high-contrast background
               paddingTop: "10rem",
               paddingBottom: "10rem",
             },
@@ -648,7 +649,7 @@ export const createDefaultProject = (): Project => {
                     id: "comp-cta-heading",
                     type: "Heading",
                     props: { text: "Let's build something better.", level: "h2" },
-                    styles: { fontSize: "4rem", fontWeight: "500", color: "#ffffff", textAlign: "center", letterSpacing: "-0.02em", lineHeight: "1.1" },
+                    styles: { fontSize: "4rem", fontWeight: "500", color: "var(--surface-color)", textAlign: "center", letterSpacing: "-0.02em", lineHeight: "1.1" },
                   },
                   {
                     id: "comp-cta-btn-container",
@@ -660,7 +661,7 @@ export const createDefaultProject = (): Project => {
                         id: "comp-cta-button",
                         type: "Button",
                         props: { label: "Work together", variant: "primary", link: "mailto:hello@northstar.studio" },
-                        styles: { background: "#ffffff", color: "#111111", borderRadius: "0px", fontSize: "0.75rem", letterSpacing: "0.05em" },
+                        styles: { background: "var(--surface-color)", color: "var(--primary-color)", borderRadius: "var(--border-radius)", fontSize: "0.75rem", letterSpacing: "0.05em" },
                       },
                     ],
                   },
@@ -671,10 +672,10 @@ export const createDefaultProject = (): Project => {
           // 10. Footer
           {
             id: "sec-footer",
-            name: "Footer",
+            name: "10 — Site Footer",
             type: "Footer",
             styles: {
-              background: "#ffffff",
+              background: "var(--surface-color)",
               paddingTop: "4rem",
               paddingBottom: "4rem",
             },
@@ -701,13 +702,13 @@ export const createDefaultProject = (): Project => {
                             id: "comp-footer-logo",
                             type: "Logo",
                             props: { text: "NORTHSTAR STUDIO" },
-                            styles: { color: "#111111", fontSize: "0.875rem", fontWeight: "700", letterSpacing: "0.05em" },
+                            styles: { color: "var(--text-color)", fontSize: "0.875rem", fontWeight: "700", letterSpacing: "0.05em" },
                           },
                           {
                             id: "comp-footer-text",
                             type: "Text",
                             props: { text: "Strategy for what's next." },
-                            styles: { color: "#78716c", fontSize: "0.875rem" },
+                            styles: { color: "var(--muted-color)", fontSize: "0.875rem" },
                           },
                         ],
                       },
@@ -727,13 +728,13 @@ export const createDefaultProject = (): Project => {
                                 id: "comp-footer-email",
                                 type: "Text",
                                 props: { text: "hello@northstar.studio" },
-                                styles: { color: "#111111", fontSize: "0.875rem" },
+                                styles: { color: "var(--text-color)", fontSize: "0.875rem" },
                               },
                               {
                                 id: "comp-footer-phone",
                                 type: "Text",
                                 props: { text: "+1 (555) 000-0000" },
-                                styles: { color: "#111111", fontSize: "0.875rem" },
+                                styles: { color: "var(--text-color)", fontSize: "0.875rem" },
                               },
                             ],
                           },
@@ -747,7 +748,7 @@ export const createDefaultProject = (): Project => {
                                 id: "comp-footer-address",
                                 type: "Text",
                                 props: { text: "Global Operations" },
-                                styles: { color: "#111111", fontSize: "0.875rem" },
+                                styles: { color: "var(--text-color)", fontSize: "0.875rem" },
                               },
                             ],
                           },
@@ -765,13 +766,13 @@ export const createDefaultProject = (): Project => {
                         id: "comp-footer-divider",
                         type: "Divider",
                         props: {},
-                        styles: { borderTop: "1px solid #e7e5e4", marginTop: "0", marginBottom: "0" },
+                        styles: { borderTop: "1px solid var(--border-color)", marginTop: "0", marginBottom: "0" },
                       },
                       {
                         id: "comp-footer-copyright",
                         type: "Text",
                         props: { text: "© 2026 Northstar Studio. All rights reserved." },
-                        styles: { color: "#78716c", fontSize: "0.75rem" },
+                        styles: { color: "var(--muted-color)", fontSize: "0.75rem" },
                       },
                     ],
                   },

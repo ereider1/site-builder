@@ -46,7 +46,7 @@ function runPersistenceTests() {
   
   const initialLoaded = useBuilderStore.getState().project;
   assertEquals(initialLoaded !== null, true, "Zustand initializes with default project when storage is empty");
-  assertEquals(initialLoaded?.id, "northstar-studio-project", "Default project is northstar-studio-project");
+  assertEquals(initialLoaded?.id, "northstar-studio-v2", "Default project is northstar-studio-v2");
 
   // 2. Clone and Populate Flow (Test Onboarding Pipeline)
   const templateId = "professional-services-modern";
