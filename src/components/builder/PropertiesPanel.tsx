@@ -68,17 +68,20 @@ export const PropertiesPanel: React.FC = () => {
     if (!project) return null;
     return (
       <div className="w-80 border-l border-neutral-800 bg-neutral-900 text-neutral-300 p-4 h-full flex flex-col text-sm overflow-y-auto select-none">
-        <h3 className="font-semibold text-xs uppercase tracking-wider text-neutral-400 mb-4 flex items-center gap-1.5">
-          <Paintbrush className="w-3.5 h-3.5 text-indigo-400" />
-          Global Design System
-        </h3>
+        
+        {/* First-class Visual Header Banner for Global Project Theme */}
+        <div className="flex items-center gap-1.5 px-3 py-2 bg-indigo-950/20 border border-indigo-900/40 rounded-lg mb-4 select-none">
+          <Paintbrush className="w-4 h-4 text-indigo-400" />
+          <span className="font-bold text-xs uppercase tracking-wider text-white">Project Theme & Styling</span>
+        </div>
+        
         <p className="text-neutral-500 text-xs mb-4 leading-normal">
-          Select any element on the canvas to edit its properties, or customize global styles below.
+          Customize the primary design language, typography fonts, and visual token-scale variables globally across your website.
         </p>
 
         {/* Dynamic Theme Selector (Phase Theme System) */}
         <div className="space-y-2.5 mb-6 pb-6 border-b border-neutral-800">
-          <label className="block text-xs font-semibold text-neutral-400">Styling Theme</label>
+          <label className="block text-xs font-semibold text-neutral-400">Select Global Theme</label>
           <div className="space-y-2">
             {starterThemesRegistry.map((theme) => {
               const isActive = project.themeId === theme.id || (!project.themeId && theme.id === "editorial");
@@ -88,8 +91,8 @@ export const PropertiesPanel: React.FC = () => {
                   onClick={() => switchProjectTheme(theme.id)}
                   className={`w-full p-3 rounded-lg text-left transition-all border flex flex-col gap-1.5 group ${
                     isActive
-                      ? "bg-indigo-950/20 border-indigo-500 text-white"
-                      : "bg-neutral-850 border-neutral-800 hover:border-neutral-750 text-neutral-300 animate-none"
+                      ? "bg-indigo-950/30 border-indigo-500 text-white"
+                      : "bg-neutral-850 border-neutral-800 hover:border-neutral-750 text-neutral-300"
                   }`}
                 >
                   <div className="flex items-center justify-between w-full">
@@ -155,10 +158,12 @@ export const PropertiesPanel: React.FC = () => {
 
   return (
     <div className="w-80 border-l border-neutral-800 bg-neutral-900 text-neutral-300 p-4 h-full flex flex-col text-sm overflow-y-auto select-none">
-      <h3 className="font-semibold text-xs uppercase tracking-wider text-neutral-400 mb-4 flex items-center gap-1.5">
-        <Sliders className="w-3.5 h-3.5 text-indigo-400" />
-        Properties Inspector
-      </h3>
+      
+      {/* Prominent High-Contrast Header Banner for Component Properties */}
+      <div className="flex items-center gap-1.5 px-3 py-2 bg-neutral-950 border border-neutral-800 rounded-lg mb-4 select-none">
+        <Sliders className="w-4 h-4 text-indigo-400" />
+        <span className="font-bold text-xs uppercase tracking-wider text-white">Properties Inspector</span>
+      </div>
 
       {selectedComponent ? (
         // COMPONENT EDITING FIELDS

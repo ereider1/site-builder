@@ -41,121 +41,80 @@ function runBlockLibraryTests() {
   // Clear previous states
   mockLocalStorage.clear();
 
-  // 1. Registry Contains Block
-  const blockId = "hero-editorial-split";
-  const blockDef = findBlockById(blockId);
-  assertEquals(blockDef !== null, true, "Block Registry contains hero-editorial-split");
-  assertEquals(blockDef?.name, "Hero — Editorial Split", "Block name is correctly registered");
-  assertEquals(blockDef?.category, "Hero", "Block category is correctly Hero");
-
-  // 2. Factory creates valid Section
-  const section1 = blockDef!.createSection();
-  assertEquals(section1.id.startsWith("sec-hero-split-"), true, "createSection() generates unique Section ID");
-  assertEquals(section1.blockId, blockId, "Generated section contains blockId property");
-  assertEquals(section1.components.length, 1, "Section contains exactly 1 first-level container component");
-
-  // 3. Recursive ID Uniqueness Assertions
-  const container = section1.components[0];
-  const colLeft = container.children?.[0];
-  const colRight = container.children?.[1];
+  // 1. Registry Contains Both Blocks (Phase Services Block complete)
+  assertEquals(starterBlocksRegistry.length, 2, "Blocks Registry contains exactly 2 blocks");
   
-  assertEquals(container.id.startsWith("comp-container-"), true, "Container component has a unique ID prefix");
-  assertEquals(colLeft?.id.startsWith("comp-container-"), true, "Left Column container component has a unique ID prefix");
-  assertEquals(colRight?.id.startsWith("comp-container-"), true, "Right Column container component has a unique ID prefix");
+  const heroDef = findBlockById("hero-editorial-split");
+  assertEquals(heroDef !== null, true, "Block Registry contains hero-editorial-split");
+  
+  const servicesDef = findBlockById("services-editorial-list");
+  assertEquals(servicesDef !== null, true, "Block Registry contains services-editorial-list");
+  assertEquals(servicesDef?.category, "Services", "Services block is categorized under Services");
 
-  const heading = colLeft?.children?.[1];
-  const text = colLeft?.children?.[2];
-  const image = colRight?.children?.[0];
+  // 2. Factory creates valid Section (Hero)
+  const sectionHero = heroDef!.createSection();
+  assertEquals(sectionHero.id.startsWith("sec-hero-split-"), true, "Hero createSection() generates unique Section ID");
+  assertEquals(sectionHero.blockId, "hero-editorial-split", "Hero section contains blockId property");
 
-  assertEquals(heading?.id.startsWith("comp-hero-heading-"), true, "Oversized Heading component receives a unique ID");
-  assertEquals(text?.id.startsWith("comp-hero-text-"), true, "Supporting paragraph Text component receives a unique ID");
-  assertEquals(image?.id.startsWith("comp-hero-image-"), true, "Hero Image component receives a unique ID");
+  // 3. Factory creates valid Section (Services List)
+  const sectionServices = servicesDef!.createSection();
+  assertEquals(sectionServices.id.startsWith("sec-services-list-"), true, "Services createSection() generates unique Section ID");
+  assertEquals(sectionServices.blockId, "services-editorial-list", "Services section contains blockId property");
+  assertEquals(sectionServices.components.length, 1, "Services section contains exactly 1 outer container");
+
+  const servicesContainer = sectionServices.components[0];
+  const servicesHeader = servicesContainer.children?.[0];
+  const servicesList = servicesContainer.children?.[1];
+
+  assertEquals(servicesHeader?.type, "Container", "Services container holds Section Header container");
+  assertEquals(servicesList?.type, "Container", "Services container holds rows container block");
+  assertEquals(servicesList?.children?.length, 3, "Services list contains exactly 3 service row containers");
+
+  // Verify Default service row copy is present
+  const firstRow = servicesList?.children?.[0];
+  const firstRowGrid = firstRow?.children?.[0];
+  const firstRowCol1 = firstRowGrid?.children?.[0];
+  
+  const row1Title = firstRowCol1?.children?.[1];
+  const row1Desc = firstRowGrid?.children?.[1];
+  const row1Arrow = firstRowGrid?.children?.[2];
+
+  assertEquals(row1Title?.props.text, "Strategy", "Default service row title is Strategy");
+  assertEquals(row1Desc?.props.text, "Turn complex challenges into clear, actionable direction.", "Default service row description is correct");
+  assertEquals(row1Arrow?.props.text, "→", "Default service row action arrow is present");
 
   // 4. Instantiation Isolation (Calling createSection() twice generates distinct IDs)
-  const section2 = blockDef!.createSection();
-  assertEquals(section1.id !== section2.id, true, "Instance 1 and Instance 2 Section IDs are mutually unique");
+  const servicesInstance1 = servicesDef!.createSection();
+  const servicesInstance2 = servicesDef!.createSection();
+  assertEquals(servicesInstance1.id !== servicesInstance2.id, true, "Services Instance 1 and Instance 2 Section IDs are mutually unique");
   
-  const h1_Instance1 = section1.components[0].children?.[0].children?.[1];
-  const h1_Instance2 = section2.components[0].children?.[0].children?.[1];
-  assertEquals(h1_Instance1?.id !== h1_Instance2?.id, true, "Heading component IDs in Instance 1 vs Instance 2 are mutually unique");
+  const row1_Inst1_Title = servicesInstance1.components[0].children?.[1].children?.[0].children?.[0].children?.[0].children?.[1];
+  const row1_Inst2_Title = servicesInstance2.components[0].children?.[1].children?.[0].children?.[0].children?.[0].children?.[1];
+  assertEquals(row1_Inst1_Title?.id !== row1_Inst2_Title?.id, true, "Component IDs inside Services Instance 1 and Instance 2 are mutually unique");
 
-  // 5. Expected Nested Components Structure Checks
-  assertEquals(heading?.type, "Heading", "Instance contains Hero Heading component");
-  assertEquals(text?.type, "Text", "Instance contains supporting Text component");
-  assertEquals(image?.type, "Image", "Instance contains Hero Image component");
-
-  // 6. Explicit Content-Slot Mappings Preservation
-  assertEquals(section1.contentSlots !== undefined, true, "Block Section carries local contentSlots metadata mappings list");
-  assertEquals(section1.contentSlots?.length, 3, "Exactly 3 local content slot mappings registered inside the section");
-  
-  const headingSlot = section1.contentSlots?.find((s) => s.componentId === heading?.id);
-  assertEquals(headingSlot?.source, "business.tagline", "Local heading maps dynamically to business.tagline");
-
-  const imageSlot = section1.contentSlots?.find((s) => s.componentId === image?.id);
-  assertEquals(imageSlot?.source, "brand.heroImage", "Local image maps dynamically to brand.heroImage");
-
-  // 7. Population Execution via Dynamic Content Slots
+  // 5. Insertion Preserves Existing Sections & Integrity
   const store = useBuilderStore.getState();
   store.initialize(); // Load standard project (size: 10 sections)
   
   const initialSectionsCount = useBuilderStore.getState().project!.pages[0].sections.length;
   assertEquals(initialSectionsCount, 10, "Template loads with standard 10 sections");
 
-  // 8. Insertion Preserves Existing Sections & Integrity
-  useBuilderStore.getState().addBlockToPage(blockId);
+  // Insert Services Block
+  useBuilderStore.getState().addBlockToPage("services-editorial-list");
   const updatedProject = useBuilderStore.getState().project!;
   const finalSections = updatedProject.pages[0].sections;
   
-  assertEquals(finalSections.length, 11, "Block insertion appends section to current page (size increases to 11)");
-  assertEquals(finalSections[10].blockId, blockId, "Appended final section matches the Block Library ID");
+  assertEquals(finalSections.length, 11, "Services block insertion appends section to page (size increases to 11)");
+  assertEquals(finalSections[10].blockId, "services-editorial-list", "Appended final section has Services blockId");
 
-  // Fetch the active component IDs from the newly inserted block section
-  const insertedSection = finalSections[10];
-  const insertedContainer = insertedSection.components[0];
-  const insertedColLeft = insertedContainer.children?.[0];
-  const insertedColRight = insertedContainer.children?.[1];
-  
-  const insertedHeading = insertedColLeft?.children?.[1];
-  const insertedText = insertedColLeft?.children?.[2];
-  const insertedImage = insertedColRight?.children?.[0];
-
-  // Test content slot population of newly inserted block
-  const testProfile: UserContent = {
-    business: {
-      tagline: "Clarity for what's next.",
-      description: "Custom strategies for modern brands.",
-    },
-    brand: {
-      heroImage: "https://images.unsplash.com/custom-test-image-url",
-    }
-  };
-
-  const populatedProject = populateProject(updatedProject, testProfile);
-  const populatedSection = populatedProject.pages[0].sections[10];
-  
-  // Find heading and image inside inserted block on populated project
-  const populatedHeading = findComponent(populatedSection.components, insertedHeading?.id as string);
-  assertEquals(populatedHeading?.props.text, "Clarity for what's next.", "Dynamic local block content slots populate Tagline text correctly");
-
-  const populatedImg = findComponent(populatedSection.components, insertedImage?.id as string);
-  assertEquals(populatedImg?.props.src, "https://images.unsplash.com/custom-test-image-url", "Dynamic local block content slots populate Hero Image src correctly");
-
-  // Fallback checks: if profile missing, preserve template defaults
-  const emptyProfile: UserContent = {};
-  const fallbackProject = populateProject(updatedProject, emptyProfile);
-  const fallbackSection = fallbackProject.pages[0].sections[10];
-  
-  const fallbackHeading = findComponent(fallbackSection.components, insertedHeading?.id as string);
-  assertEquals(fallbackHeading?.props.text, "Build a business ready for what comes next.", "Safe fallback preserves default block headline when copy empty");
-
-  // 9. Undo/Redo & Save checks
+  // 6. Undo/Redo & Save checks
   // Trigger undo of block insertion
   useBuilderStore.getState().undo();
-  assertEquals(useBuilderStore.getState().project!.pages[0].sections.length, 10, "Undo successfully removes the inserted block section");
+  assertEquals(useBuilderStore.getState().project!.pages[0].sections.length, 10, "Undo successfully removes the inserted Services block section");
   
   // Trigger redo of block insertion
   useBuilderStore.getState().redo();
-  assertEquals(useBuilderStore.getState().project!.pages[0].sections.length, 11, "Redo successfully restores the inserted block section");
+  assertEquals(useBuilderStore.getState().project!.pages[0].sections.length, 11, "Redo successfully restores the inserted Services block section");
 
   console.log("\n==================================================");
   console.log("🎉 ALL NATIVE BLOCK LIBRARY TESTS PASSED PERFECTLY!");

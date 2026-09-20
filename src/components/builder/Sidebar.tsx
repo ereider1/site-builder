@@ -26,6 +26,9 @@ export const Sidebar: React.FC = () => {
   // Helper to generate unique IDs
   const generateId = (prefix: string) => `${prefix}-${Math.random().toString(36).substr(2, 9)}`;
 
+  // Group blocks by categories to support multiple blocks per category cleanly
+  const categories = Array.from(new Set(starterBlocksRegistry.map((b) => b.category)));
+
   // Add individual component to the selected Container or first active Section
   const handleAddComponentType = (type: ComponentType) => {
     if (!selectedSectionId) {
@@ -185,65 +188,110 @@ export const Sidebar: React.FC = () => {
         )}
       </div>
 
-      {/* 2. Block Library Section (Primary section insertion experience) */}
+      {/* 2. Tailblocks-Style Visual Block Library Section */}
       <div className="p-4 border-b border-neutral-800 bg-neutral-900/50">
-        <h3 className="font-semibold text-xs uppercase tracking-wider text-indigo-400 mb-3 flex items-center gap-1.5 select-none">
+        <h3 className="font-semibold text-xs uppercase tracking-wider text-indigo-400 mb-4 flex items-center gap-1.5 select-none">
           <Sparkles className="w-3.5 h-3.5" />
           Block Library
         </h3>
         
-        <div className="space-y-4">
-          <p className="text-neutral-500 text-[11px] leading-snug">
-            Choose a premium, pre-designed section to insert directly into your page.
-          </p>
-          
-          <div className="space-y-3">
-            {starterBlocksRegistry.map((block) => (
-              <div
-                key={block.id}
-                onClick={() => addBlockToPage(block.id)}
-                className="w-full p-3 bg-neutral-850 hover:bg-neutral-800 border border-neutral-800 hover:border-neutral-700 rounded-lg text-left transition-all duration-200 cursor-pointer flex flex-col gap-2.5 group"
-              >
-                {/* 
-                  Miniature Blueprint Preview Drawing of the Hero — Editorial Split block
-                  Communicates the asymmetric layout, columns balance, image position, and typography hierarchy visually.
-                */}
-                <div className="w-full aspect-[16/10] bg-neutral-950 border border-neutral-800 rounded-md p-3 flex gap-3 overflow-hidden select-none group-hover:border-indigo-500/50 transition-colors">
-                  {/* Left side: Typography lines */}
-                  <div className="flex-1 flex flex-col justify-center gap-1.5">
-                    {/* Eyebrow line */}
-                    <div className="w-8 h-1 bg-stone-700/40 rounded-full" />
-                    {/* Main Headline lines */}
-                    <div className="space-y-1">
-                      <div className="w-full h-1.5 bg-indigo-500/45 rounded" />
-                      <div className="w-10/12 h-1.5 bg-indigo-500/45 rounded" />
-                    </div>
-                    {/* Supporting copy lines */}
-                    <div className="space-y-0.5 pt-0.5">
-                      <div className="w-full h-0.5 bg-stone-800/40 rounded-full" />
-                      <div className="w-11/12 h-0.5 bg-stone-800/40 rounded-full" />
-                    </div>
-                    {/* Button boxes */}
-                    <div className="flex gap-1 pt-1">
-                      <div className="w-7 h-3 bg-indigo-500/30 border border-indigo-500/10 rounded-sm" />
-                      <div className="w-7 h-3 bg-transparent border border-stone-800 rounded-sm" />
-                    </div>
-                  </div>
+        <div className="space-y-6">
+          {categories.map((category) => {
+            const categoryBlocks = starterBlocksRegistry.filter((b) => b.category === category);
+            if (categoryBlocks.length === 0) return null;
 
-                  {/* Right side: Portrait Image miniature block */}
-                  <div className="w-5/12 bg-neutral-900 border border-neutral-850 rounded flex items-center justify-center relative overflow-hidden shrink-0">
-                    <div className="absolute inset-0 bg-indigo-500/5 opacity-5" />
-                    <ImageIcon className="w-3.5 h-3.5 text-stone-700/40" />
-                  </div>
-                </div>
+            return (
+              <div key={category} className="space-y-3">
+                {/* Minimal, letter-spaced Category Separator Tag */}
+                <span className="block text-[10px] font-bold tracking-widest text-stone-500 uppercase pb-1.5 border-b border-neutral-800">
+                  {category}
+                </span>
 
-                <div className="space-y-0.5 px-0.5">
-                  <span className="block text-white font-bold text-xs group-hover:text-indigo-400 transition-colors">{block.name}</span>
-                  <span className="block text-[10px] text-neutral-500 leading-normal font-medium">{block.description}</span>
+                <div className="space-y-3">
+                  {categoryBlocks.map((block) => (
+                    <div
+                      key={block.id}
+                      onClick={() => addBlockToPage(block.id)}
+                      className="w-full p-2 bg-neutral-850 hover:bg-neutral-800 border border-neutral-800/80 hover:border-neutral-700 rounded-lg text-left transition-all duration-200 cursor-pointer flex flex-col gap-2 group shadow-sm select-none"
+                    >
+                      {/* 
+                        Compact Miniature Visual Blueprint of the Block
+                        Communicates composition and proportions elegantly without doc-text bloat.
+                        Entire card acts as the clickable insert trigger.
+                      */}
+                      <div className="w-full aspect-[16/10] bg-neutral-950 border border-neutral-800 rounded-md p-3.5 flex gap-3.5 overflow-hidden relative transition-colors group-hover:border-indigo-500/40 select-none">
+                        
+                        {/* Render customized high-fidelity CSS miniature vector drawings depending on the blockId */}
+                        {block.id === "hero-editorial-split" ? (
+                          <>
+                            {/* Left column: Miniature editorial typography lines */}
+                            <div className="flex-1 flex flex-col justify-center gap-1.5 z-10">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="space-y-0.75">
+                                <div className="w-full h-1 bg-indigo-500/40 rounded-sm" />
+                                <div className="w-10/12 h-1 bg-indigo-500/40 rounded-sm" />
+                              </div>
+                              <div className="space-y-0.5 pt-0.5">
+                                <div className="w-full h-0.5 bg-stone-800/30 rounded-full" />
+                                <div className="w-11/12 h-0.5 bg-stone-800/30 rounded-full" />
+                              </div>
+                              <div className="flex gap-1 pt-1.5">
+                                <div className="w-7 h-2.5 bg-indigo-500/25 border border-indigo-500/10 rounded-sm" />
+                                <div className="w-7 h-2.5 bg-transparent border border-stone-800 rounded-sm" />
+                              </div>
+                            </div>
+                            {/* Right column: Image container block */}
+                            <div className="w-5/12 bg-neutral-900 border border-neutral-850 rounded flex items-center justify-center relative overflow-hidden shrink-0 z-10">
+                              <div className="absolute inset-0 bg-indigo-500/5 opacity-5" />
+                              <ImageIcon className="w-3.5 h-3.5 text-stone-700/35" />
+                            </div>
+                          </>
+                        ) : block.id === "services-editorial-list" ? (
+                          <div className="w-full flex flex-col justify-between py-1 z-10">
+                            {/* Left title eyebrow */}
+                            <div className="flex gap-1.5 items-center">
+                              <div className="w-6 h-0.75 bg-stone-700/50 rounded-full animate-none" />
+                              <div className="w-12 h-1 bg-indigo-500/40 rounded" />
+                            </div>
+                            
+                            {/* Rows stack */}
+                            <div className="space-y-1 pt-1 flex-1 flex flex-col justify-center">
+                              {[1, 2, 3].map((rowIdx) => (
+                                <div key={rowIdx} className="border-t border-neutral-800/80 py-1.5 flex justify-between items-center w-full">
+                                  <div className="flex gap-2 items-center">
+                                    <span className="text-[7px] text-stone-500/60 font-mono">0{rowIdx}</span>
+                                    <div className="space-y-0.5">
+                                      <div className="w-10 h-0.75 bg-indigo-500/30 rounded-sm" />
+                                      <div className="w-16 h-0.5 bg-stone-800/20 rounded-full" />
+                                    </div>
+                                  </div>
+                                  <span className="text-[7px] text-indigo-500/50 mr-1">→</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : null}
+
+                        {/* Subtle interactive '+' overlay indicator on Hover */}
+                        <div className="absolute inset-0 bg-indigo-600/5 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity z-20">
+                          <span className="px-2 py-1 bg-indigo-600 text-white font-bold text-[10px] uppercase tracking-wider rounded shadow-md border border-indigo-500/20">
+                            + Add Block
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Compact Label description area */}
+                      <div className="px-1 py-0.5 flex justify-between items-center w-full">
+                        <span className="block text-white font-bold text-xs tracking-wide group-hover:text-indigo-400 transition-colors">
+                          {block.name}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
 
