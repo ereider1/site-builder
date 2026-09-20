@@ -246,6 +246,43 @@ export const Sidebar: React.FC = () => {
                               <ImageIcon className="w-3.5 h-3.5 text-stone-700/35" />
                             </div>
                           </>
+                        ) : block.id === "hero-centered" ? (
+                          <div className="w-full flex flex-col justify-between py-1 px-1.5 z-10">
+                            {/* Centered Typography layout */}
+                            <div className="flex flex-col items-center gap-1 text-center">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-20 h-1.5 bg-indigo-500/40 rounded-sm" />
+                              <div className="w-24 h-1.5 bg-indigo-500/40 rounded-sm" />
+                              <div className="w-28 h-0.5 bg-stone-800/30 rounded-full mt-0.5" />
+                              <div className="w-20 h-0.5 bg-stone-800/30 rounded-full" />
+                            </div>
+                            {/* Centered lower visual image box */}
+                            <div className="w-full h-8 bg-neutral-900 border border-neutral-850 rounded flex items-center justify-center relative overflow-hidden">
+                              <div className="absolute inset-0 bg-indigo-500/5 opacity-5" />
+                              <ImageIcon className="w-2.5 h-2.5 text-stone-700/30" />
+                            </div>
+                          </div>
+                        ) : block.id === "hero-full-image" ? (
+                          <div className="w-full flex flex-col gap-2 z-10 justify-center">
+                            {/* Top full-width visual cover */}
+                            <div className="w-full h-11 bg-neutral-900 border border-neutral-850 rounded flex items-center justify-center relative overflow-hidden shrink-0">
+                              <div className="absolute inset-0 bg-indigo-500/5 opacity-5" />
+                              <ImageIcon className="w-3 h-3 text-stone-700/30" />
+                            </div>
+                            {/* Bottom split typography */}
+                            <div className="flex gap-3 justify-between items-start">
+                              <div className="space-y-1 w-6/12 shrink-0">
+                                <div className="w-6 h-0.75 bg-stone-700/50 rounded-full" />
+                                <div className="w-full h-1 bg-indigo-500/35 rounded-sm" />
+                                <div className="w-10/12 h-1 bg-indigo-500/35 rounded-sm" />
+                              </div>
+                              <div className="space-y-0.75 w-5/12">
+                                <div className="w-full h-0.5 bg-stone-800/30 rounded-full" />
+                                <div className="w-10/12 h-0.5 bg-stone-800/30 rounded-full" />
+                                <div className="w-7 h-2 bg-indigo-500/25 border border-indigo-500/10 rounded-sm mt-0.5" />
+                              </div>
+                            </div>
+                          </div>
                         ) : block.id === "services-editorial-list" ? (
                           <div className="w-full flex flex-col justify-between py-1 z-10">
                             {/* Left title eyebrow */}
@@ -266,6 +303,27 @@ export const Sidebar: React.FC = () => {
                                     </div>
                                   </div>
                                   <span className="text-[7px] text-indigo-500/50 mr-1">→</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "services-three-column" ? (
+                          <div className="w-full flex flex-col justify-between py-1 z-10">
+                            {/* Header preview */}
+                            <div className="space-y-1 pl-0.5">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-16 h-1 bg-indigo-500/40 rounded-sm" />
+                            </div>
+                            {/* 3 card columns side-by-side */}
+                            <div className="flex gap-1.5 pt-1.5">
+                              {[1, 2, 3].map((cardIdx) => (
+                                <div key={cardIdx} className="flex-1 bg-neutral-900 border border-neutral-850 p-1.5 rounded flex flex-col gap-1 shadow-sm">
+                                  <span className="text-[5px] text-stone-500/60 font-mono leading-none">0{cardIdx}</span>
+                                  <div className="w-7 h-0.75 bg-indigo-500/35 rounded-sm" />
+                                  <div className="space-y-0.5 pt-0.5">
+                                    <div className="w-full h-0.25 bg-stone-800/30 rounded-full" />
+                                    <div className="w-9/12 h-0.25 bg-stone-800/30 rounded-full" />
+                                  </div>
                                 </div>
                               ))}
                             </div>

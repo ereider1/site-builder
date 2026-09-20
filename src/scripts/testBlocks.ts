@@ -41,58 +41,73 @@ function runBlockLibraryTests() {
   // Clear previous states
   mockLocalStorage.clear();
 
-  // 1. Registry Contains Both Blocks (Phase Services Block complete)
-  assertEquals(starterBlocksRegistry.length, 2, "Blocks Registry contains exactly 2 blocks");
+  // 1. Registry Contains All 5 Blocks (Phase Expand Block Library complete)
+  assertEquals(starterBlocksRegistry.length, 5, "Blocks Registry contains exactly 5 blocks total");
   
-  const heroDef = findBlockById("hero-editorial-split");
-  assertEquals(heroDef !== null, true, "Block Registry contains hero-editorial-split");
+  const heroSplitDef = findBlockById("hero-editorial-split");
+  assertEquals(heroSplitDef !== null, true, "Block Registry contains hero-editorial-split");
   
-  const servicesDef = findBlockById("services-editorial-list");
-  assertEquals(servicesDef !== null, true, "Block Registry contains services-editorial-list");
-  assertEquals(servicesDef?.category, "Services", "Services block is categorized under Services");
+  const heroCenteredDef = findBlockById("hero-centered");
+  assertEquals(heroCenteredDef !== null, true, "Block Registry contains hero-centered");
+  assertEquals(heroCenteredDef?.category, "Hero", "Hero Centered categorized under Hero");
 
-  // 2. Factory creates valid Section (Hero)
-  const sectionHero = heroDef!.createSection();
-  assertEquals(sectionHero.id.startsWith("sec-hero-split-"), true, "Hero createSection() generates unique Section ID");
-  assertEquals(sectionHero.blockId, "hero-editorial-split", "Hero section contains blockId property");
+  const heroFullImageDef = findBlockById("hero-full-image");
+  assertEquals(heroFullImageDef !== null, true, "Block Registry contains hero-full-image");
+  assertEquals(heroFullImageDef?.category, "Hero", "Hero Full Image categorized under Hero");
 
-  // 3. Factory creates valid Section (Services List)
-  const sectionServices = servicesDef!.createSection();
-  assertEquals(sectionServices.id.startsWith("sec-services-list-"), true, "Services createSection() generates unique Section ID");
-  assertEquals(sectionServices.blockId, "services-editorial-list", "Services section contains blockId property");
-  assertEquals(sectionServices.components.length, 1, "Services section contains exactly 1 outer container");
+  const servicesListDef = findBlockById("services-editorial-list");
+  assertEquals(servicesListDef !== null, true, "Block Registry contains services-editorial-list");
+  assertEquals(servicesListDef?.category, "Services", "Services Editorial List categorized under Services");
 
-  const servicesContainer = sectionServices.components[0];
+  const servicesThreeColumnDef = findBlockById("services-three-column");
+  assertEquals(servicesThreeColumnDef !== null, true, "Block Registry contains services-three-column");
+  assertEquals(servicesThreeColumnDef?.category, "Services", "Services Three Column categorized under Services");
+
+  // 2. Factory creates valid Section (Hero Centered)
+  const sectionHeroCentered = heroCenteredDef!.createSection();
+  assertEquals(sectionHeroCentered.id.startsWith("sec-hero-centered-"), true, "Hero Centered createSection() generates unique Section ID");
+  assertEquals(sectionHeroCentered.blockId, "hero-centered", "Hero Centered section contains blockId property");
+
+  // 3. Factory creates valid Section (Hero Full Image)
+  const sectionHeroFull = heroFullImageDef!.createSection();
+  assertEquals(sectionHeroFull.id.startsWith("sec-hero-full-image-"), true, "Hero Full Image createSection() generates unique Section ID");
+  assertEquals(sectionHeroFull.blockId, "hero-full-image", "Hero Full Image section contains blockId property");
+
+  // 4. Factory creates valid Section (Services Three Column Card List)
+  const sectionServicesThree = servicesThreeColumnDef!.createSection();
+  assertEquals(sectionServicesThree.id.startsWith("sec-services-cards-"), true, "Services Three Column createSection() generates unique Section ID");
+  assertEquals(sectionServicesThree.blockId, "services-three-column", "Services Three Column section contains blockId property");
+  assertEquals(sectionServicesThree.components.length, 1, "Services Three Column section contains exactly 1 outer container");
+
+  const servicesContainer = sectionServicesThree.components[0];
   const servicesHeader = servicesContainer.children?.[0];
-  const servicesList = servicesContainer.children?.[1];
+  const servicesGrid = servicesContainer.children?.[1];
 
   assertEquals(servicesHeader?.type, "Container", "Services container holds Section Header container");
-  assertEquals(servicesList?.type, "Container", "Services container holds rows container block");
-  assertEquals(servicesList?.children?.length, 3, "Services list contains exactly 3 service row containers");
+  assertEquals(servicesGrid?.type, "Container", "Services container holds grid container block");
+  assertEquals(servicesGrid?.children?.length, 3, "Services grid contains exactly 3 service cards");
 
-  // Verify Default service row copy is present
-  const firstRow = servicesList?.children?.[0];
-  const firstRowGrid = firstRow?.children?.[0];
-  const firstRowCol1 = firstRowGrid?.children?.[0];
-  
-  const row1Title = firstRowCol1?.children?.[1];
-  const row1Desc = firstRowGrid?.children?.[1];
-  const row1Arrow = firstRowGrid?.children?.[2];
+  // Verify Default service card copy is present
+  const card1 = servicesGrid?.children?.[0];
+  const card1Num = card1?.children?.[0];
+  const card1Title = card1?.children?.[1];
+  const card1Desc = card1?.children?.[2];
+  const card1Arrow = card1?.children?.[3];
 
-  assertEquals(row1Title?.props.text, "Strategy", "Default service row title is Strategy");
-  assertEquals(row1Desc?.props.text, "Turn complex challenges into clear, actionable direction.", "Default service row description is correct");
-  assertEquals(row1Arrow?.props.text, "→", "Default service row action arrow is present");
+  assertEquals(card1Title?.props.text, "Strategy", "Default service card title is Strategy");
+  assertEquals(card1Desc?.props.text, "Turn complex challenges into clear, actionable direction.", "Default service card description is correct");
+  assertEquals(card1Arrow?.props.text, "→", "Default service card action arrow is present");
 
-  // 4. Instantiation Isolation (Calling createSection() twice generates distinct IDs)
-  const servicesInstance1 = servicesDef!.createSection();
-  const servicesInstance2 = servicesDef!.createSection();
+  // 5. Instantiation Isolation (Calling createSection() twice generates distinct IDs)
+  const servicesInstance1 = servicesThreeColumnDef!.createSection();
+  const servicesInstance2 = servicesThreeColumnDef!.createSection();
   assertEquals(servicesInstance1.id !== servicesInstance2.id, true, "Services Instance 1 and Instance 2 Section IDs are mutually unique");
   
-  const row1_Inst1_Title = servicesInstance1.components[0].children?.[1].children?.[0].children?.[0].children?.[0].children?.[1];
-  const row1_Inst2_Title = servicesInstance2.components[0].children?.[1].children?.[0].children?.[0].children?.[0].children?.[1];
-  assertEquals(row1_Inst1_Title?.id !== row1_Inst2_Title?.id, true, "Component IDs inside Services Instance 1 and Instance 2 are mutually unique");
+  const card1_Inst1_Title = servicesInstance1.components[0].children?.[1].children?.[0].children?.[1];
+  const card1_Inst2_Title = servicesInstance2.components[0].children?.[1].children?.[0].children?.[1];
+  assertEquals(card1_Inst1_Title?.id !== card1_Inst2_Title?.id, true, "Component IDs inside Services Instance 1 and Instance 2 are mutually unique");
 
-  // 5. Insertion Preserves Existing Sections & Integrity
+  // 6. Insertion Preserves Existing Sections & Integrity
   const store = useBuilderStore.getState();
   store.initialize(); // Load standard project (size: 10 sections)
   
@@ -100,14 +115,14 @@ function runBlockLibraryTests() {
   assertEquals(initialSectionsCount, 10, "Template loads with standard 10 sections");
 
   // Insert Services Block
-  useBuilderStore.getState().addBlockToPage("services-editorial-list");
+  useBuilderStore.getState().addBlockToPage("services-three-column");
   const updatedProject = useBuilderStore.getState().project!;
   const finalSections = updatedProject.pages[0].sections;
   
   assertEquals(finalSections.length, 11, "Services block insertion appends section to page (size increases to 11)");
-  assertEquals(finalSections[10].blockId, "services-editorial-list", "Appended final section has Services blockId");
+  assertEquals(finalSections[10].blockId, "services-three-column", "Appended final section has Services blockId");
 
-  // 6. Undo/Redo & Save checks
+  // 7. Undo/Redo & Save checks
   // Trigger undo of block insertion
   useBuilderStore.getState().undo();
   assertEquals(useBuilderStore.getState().project!.pages[0].sections.length, 10, "Undo successfully removes the inserted Services block section");
