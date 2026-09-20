@@ -190,13 +190,23 @@ export default function HomeDashboard() {
                     <span>Delete</span>
                   </button>
 
-                  <button
-                    onClick={() => handleOpenProject(projectItem.id)}
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 bg-white hover:bg-stone-50 border border-stone-200 text-stone-700 rounded-lg text-xs font-semibold transition-all group/btn shadow-sm"
-                  >
-                    <span>Open Editor</span>
-                    <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 text-stone-400 group-hover/btn:text-stone-700" />
-                  </button>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href={`/preview/${projectItem.id}`}
+                      target="_blank"
+                      className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-indigo-600 hover:bg-indigo-50 border border-indigo-100 rounded-lg text-xs font-semibold transition-all group/btn-prev shadow-sm"
+                    >
+                      <span>Preview</span>
+                    </Link>
+                    
+                    <button
+                      onClick={() => handleOpenProject(projectItem.id)}
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 bg-white hover:bg-stone-50 border border-stone-200 text-stone-700 rounded-lg text-xs font-semibold transition-all group/btn shadow-sm"
+                    >
+                      <span>Open Editor</span>
+                      <ExternalLink className="w-3.5 h-3.5 transition-transform group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 text-stone-400 group-hover/btn:text-stone-700" />
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

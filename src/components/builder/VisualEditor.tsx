@@ -6,6 +6,7 @@ import { useBuilderStore } from "@/store/builderStore";
 import { Sidebar } from "./Sidebar";
 import { Canvas } from "./Canvas";
 import { PropertiesPanel } from "./PropertiesPanel";
+import { exportProjectFile, exportWebsitePackage } from "@/lib/exportUtils";
 import {
   Monitor,
   Tablet,
@@ -15,6 +16,10 @@ import {
   Save,
   CheckCircle,
   ArrowLeft,
+  Eye,
+  Download,
+  Share,
+  X,
 } from "lucide-react";
 
 export const VisualEditor: React.FC = () => {
@@ -36,6 +41,7 @@ export const VisualEditor: React.FC = () => {
   } = useBuilderStore();
 
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
   // Run initialization on load to load standard active or explicitly targeted query ID
   useEffect(() => {
@@ -54,6 +60,13 @@ export const VisualEditor: React.FC = () => {
       setSaveStatus("saved");
       setTimeout(() => setSaveStatus("idle"), 2000);
     }, 600);
+  };
+
+  const handleOpenPreview = () => {
+    if (project) {
+      saveProject(); // Auto-save before jumping to preview
+      window.open(`/preview/${project.id}`, '_blank');
+    }
   };
 
   if (!project) {
@@ -154,19 +167,40 @@ export const VisualEditor: React.FC = () => {
           <button
             onClick={handleSave}
             disabled={saveStatus === "saving"}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white rounded-lg shadow-md transition-all disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-stone-800 hover:bg-stone-700 text-xs font-semibold text-white rounded-lg shadow-sm transition-all disabled:opacity-50"
           >
             {saveStatus === "saved" ? (
               <>
-                <CheckCircle className="w-3.5 h-3.5 text-emerald-500 animate-bounce" />
+                <CheckCircle className="w-3.5 h-3.5 text-emerald-400" />
                 Saved
               </>
             ) : (
               <>
                 <Save className="w-3.5 h-3.5" />
-                {saveStatus === "saving" ? "Saving..." : "Save Project"}
+                Save
               </>
             )}
+          </button>
+
+          <span className="h-4 w-[1px] bg-stone-200 mx-1" />
+
+          {/* Local Preview Action */}
+          <button
+            onClick={handleOpenPreview}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-stone-200 hover:bg-stone-50 text-xs font-semibold text-stone-700 rounded-lg shadow-sm transition-all"
+            title="Open Clean Preview in New Tab"
+          >
+            <Eye className="w-3.5 h-3.5" />
+            Preview
+          </button>
+
+          {/* Share & Export Trigger */}
+          <button
+            onClick={() => setIsShareModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-xs font-semibold text-white rounded-lg shadow-md transition-all"
+          >
+            <Share className="w-3.5 h-3.5" />
+            Share / Export
           </button>
         </div>
       </header>
@@ -177,6 +211,86 @@ export const VisualEditor: React.FC = () => {
         <Canvas />
         <PropertiesPanel />
       </div>
+
+      {/* 3. Share & Export Modal */}
+      {isShareModalOpen && (
+        <div className="fixed inset-0 bg-stone-900/40 backdrop-blur-sm z-50 flex items-center justify-center animate-fadeIn p-4">
+          <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full overflow-hidden flex flex-col">
+            <div className="px-6 py-4 border-b border-stone-100 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-stone-900 tracking-tight flex items-center gap-2">
+                <Share className="w-4 h-4 text-indigo-600" />
+                Share & Export Project
+              </h2>
+              <button 
+                onClick={() => setIsShareModalOpen(false)}
+                className="text-stone-400 hover:text-stone-700 transition-colors p-1"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              {/* Context Explanation */}
+              <div className="p-4 bg-stone-50 border border-stone-200 rounded-lg">
+                <p className="text-sm text-stone-600 leading-relaxed">
+                  Your project data is currently saved entirely within your browser&apos;s local storage. Because there is no central database (by design), <strong>true cross-browser sharing via a simple link is not possible yet.</strong>
+                </p>
+                <p className="text-sm text-stone-600 leading-relaxed mt-3">
+                  To share this project with a client or another device, please export the project backup file or generate a static website package.
+                </p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="grid grid-cols-1 gap-4">
+                <div className="flex items-start gap-4 p-4 border border-stone-200 rounded-lg hover:border-indigo-300 transition-colors group">
+                  <div className="mt-0.5 p-2 bg-indigo-50 text-indigo-600 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                    <Download className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-stone-900 text-sm mb-1">Export Project File</h3>
+                    <p className="text-xs text-stone-500 mb-3 leading-relaxed">
+                      Download a clean <code>.webbuilder.json</code> backup containing all pages, content, and themes. You can archive this or load it in another browser.
+                    </p>
+                    <button 
+                      onClick={() => exportProjectFile(project)}
+                      className="text-xs font-semibold text-indigo-600 hover:text-indigo-800"
+                    >
+                      Download Project JSON &rarr;
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-4 p-4 border border-stone-200 rounded-lg hover:border-emerald-300 transition-colors group">
+                  <div className="mt-0.5 p-2 bg-emerald-50 text-emerald-600 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                    <Download className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-bold text-stone-900 text-sm mb-1">Export Static Website</h3>
+                    <p className="text-xs text-stone-500 mb-3 leading-relaxed">
+                      Download an intermediate Website Package. To deploy this to production, it must be compiled through the SiteBuilder Next.js static generation pipeline.
+                    </p>
+                    <button 
+                      onClick={() => exportWebsitePackage(project)}
+                      className="text-xs font-semibold text-emerald-600 hover:text-emerald-800"
+                    >
+                      Download Website Package &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="px-6 py-4 border-t border-stone-100 bg-stone-50 text-right">
+              <button
+                onClick={() => setIsShareModalOpen(false)}
+                className="px-4 py-2 bg-white border border-stone-300 hover:bg-stone-50 text-stone-700 text-sm font-semibold rounded-lg shadow-sm transition-all"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
