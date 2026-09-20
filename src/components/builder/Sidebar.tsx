@@ -260,6 +260,50 @@ export const Sidebar: React.FC = () => {
                             {/* Bottom centered Button */}
                             <div className="w-8 h-2 bg-indigo-500/25 border border-indigo-500/10 rounded-sm shrink-0" />
                           </div>
+                        ) : block.id === "gallery-featured-grid" ? (
+                          <div className="w-full flex gap-3.5 py-1 px-1 z-10 h-full justify-between items-center">
+                            {/* Left: Large square featured image */}
+                            <div className="w-5/12 aspect-square bg-neutral-900 border border-neutral-850 rounded-sm flex items-center justify-center relative overflow-hidden shrink-0">
+                              <ImageIcon className="w-3 h-3 text-stone-700/35" />
+                            </div>
+                            {/* Right: 2x2 grid of small squares */}
+                            <div className="flex-1 grid grid-cols-2 gap-1.5 h-full">
+                              {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="bg-neutral-900 border border-neutral-850 rounded-sm aspect-square flex items-center justify-center overflow-hidden">
+                                  <span className="text-[5px] text-stone-700/30">🖼</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "gallery-three-column" ? (
+                          <div className="w-full grid grid-cols-3 gap-1.5 py-1.5 px-1 z-10 h-full items-center justify-center">
+                            {[1, 2, 3, 4, 5, 6].map((i) => (
+                              <div key={i} className="bg-neutral-900 border border-neutral-850 rounded-sm aspect-[16/10] flex items-center justify-center overflow-hidden">
+                                <span className="text-[5px] text-stone-700/30">🖼</span>
+                              </div>
+                            ))}
+                          </div>
+                        ) : block.id === "gallery-editorial-mosaic" ? (
+                          <div className="w-full flex gap-3.5 py-1 px-1 z-10 h-full justify-between items-center">
+                            {/* Left: Large portrait image */}
+                            <div className="w-5/12 aspect-[3/4] bg-neutral-900 border border-neutral-850 rounded-sm flex items-center justify-center relative overflow-hidden shrink-0">
+                              <ImageIcon className="w-3 h-3 text-stone-700/35" />
+                            </div>
+                            {/* Right: Stacked landscape and squares */}
+                            <div className="flex-1 flex flex-col gap-1.5 h-full justify-center">
+                              <div className="w-full h-5 bg-neutral-900 border border-neutral-850 rounded-sm flex items-center justify-center overflow-hidden">
+                                <span className="text-[5px] text-stone-700/30">🖼</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-1.5 w-full">
+                                <div className="bg-neutral-900 border border-neutral-850 rounded-sm aspect-square flex items-center justify-center overflow-hidden">
+                                  <span className="text-[4px] text-stone-700/30">🖼</span>
+                                </div>
+                                <div className="bg-neutral-900 border border-neutral-850 rounded-sm aspect-square flex items-center justify-center overflow-hidden">
+                                  <span className="text-[4px] text-stone-700/30">🖼</span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
                         ) : block.id === "hero-editorial-split" ? (
                           <>
                             {/* Left column: Miniature editorial typography lines */}

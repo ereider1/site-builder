@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { BuilderComponent, Section } from "@/types/builder";
 import { useBuilderStore } from "@/store/builderStore";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 interface ComponentRendererProps {
   component: BuilderComponent;
   sectionId: string;
   isEditing?: boolean;
+  onImageClick?: (compId: string) => void;
 }
 
 // Fluid font-size scaling using CSS Container Query Widths (cqw)
@@ -157,6 +158,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
   component,
   sectionId,
   isEditing = true,
+  onImageClick,
 }) => {
   const { selectedComponentId, selectComponent } = useBuilderStore();
   const isSelected = selectedComponentId === component.id;
@@ -218,6 +220,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
                 component={child}
                 sectionId={sectionId}
                 isEditing={isEditing}
+                onImageClick={onImageClick}
               />
             ))}
           </div>
@@ -241,6 +244,7 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
                 component={child}
                 sectionId={sectionId}
                 isEditing={isEditing}
+                onImageClick={onImageClick}
               />
             ))}
           </div>
@@ -310,9 +314,20 @@ export const ComponentRenderer: React.FC<ComponentRendererProps> = ({
       }
 
       case "Image": {
+        const handleImageClickTrigger = (e: React.MouseEvent) => {
+          if (!isEditing && onImageClick) {
+            e.stopPropagation();
+            onImageClick(component.id);
+          }
+        };
+
         return (
           <div
-            className="overflow-hidden relative w-full border border-stone-200/20"
+            onClick={handleImageClickTrigger}
+            className={cn(
+              "overflow-hidden relative w-full border border-stone-200/20",
+              !isEditing && onImageClick && "cursor-zoom-in"
+            )}
             style={{
               aspectRatio: props.aspectRatio || "16/9",
               borderRadius: styles.borderRadius || "0px",
@@ -403,6 +418,107 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
   const { selectedSectionId, selectSection } = useBuilderStore();
   const isSelected = selectedSectionId === section.id;
 
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  // Recursively collect all Image components under this section
+  const sectionImages: BuilderComponent[] = [];
+  const gatherImages = (comp: BuilderComponent) => {
+    if (comp.type === "Image") {
+      sectionImages.push(comp);
+    }
+    if (comp.children) {
+      comp.children.forEach(gatherImages);
+    }
+  };
+  section.components.forEach(gatherImages);
+
+  const handleImageClick = (compId: string) => {
+    // If lightbox is explicitly disabled at Section Container props level, do not open
+    const isLightboxEnabled = section.components[0]?.props?.lightboxEnabled !== false;
+    if (!isLightboxEnabled) return;
+
+    const clickedIdx = sectionImages.findIndex((img) => img.id === compId);
+    if (clickedIdx !== -1) {
+      setActiveImageIndex(clickedIdx);
+      setIsLightboxOpen(true);
+    }
+  };
+
+  const handleNext = () => {
+    const isLoopEnabled = section.components[0]?.props?.loopGallery !== false;
+    setActiveImageIndex((prev) => {
+      if (prev === sectionImages.length - 1) {
+        return isLoopEnabled ? 0 : prev;
+      }
+      return prev + 1;
+    });
+  };
+
+  const handlePrev = () => {
+    const isLoopEnabled = section.components[0]?.props?.loopGallery !== false;
+    setActiveImageIndex((prev) => {
+      if (prev === 0) {
+        return isLoopEnabled ? sectionImages.length - 1 : prev;
+      }
+      return prev - 1;
+    });
+  };
+
+  // Keyboard navigation & Escape closures
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsLightboxOpen(false);
+      } else if (e.key === "ArrowRight") {
+        handleNext();
+      } else if (e.key === "ArrowLeft") {
+        handlePrev();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLightboxOpen, activeImageIndex, sectionImages]);
+
+  // Lock scroll on preview viewport parent container when open
+  useEffect(() => {
+    const scrollContainer = document.querySelector(".canvas-container")?.parentElement;
+    if (isLightboxOpen) {
+      if (scrollContainer) {
+        scrollContainer.style.overflowY = "hidden";
+      }
+    } else {
+      if (scrollContainer) {
+        scrollContainer.style.overflowY = "auto";
+      }
+    }
+    return () => {
+      if (scrollContainer) {
+        scrollContainer.style.overflowY = "auto";
+      }
+    };
+  }, [isLightboxOpen]);
+
+  // Swipe / touch detection
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const handlePointerDown = (e: React.PointerEvent) => {
+    setTouchStart(e.clientX);
+  };
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (touchStart === null) return;
+    const diffX = touchStart - e.clientX;
+    const threshold = 50;
+    if (Math.abs(diffX) > threshold) {
+      if (diffX > 0) {
+        handleNext();
+      } else {
+        handlePrev();
+      }
+    }
+    setTouchStart(null);
+  };
+
   const handleClick = (e: React.MouseEvent) => {
     if (!isEditing) return;
     selectSection(section.id);
@@ -449,9 +565,76 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({
             component={comp}
             sectionId={section.id}
             isEditing={isEditing}
+            onImageClick={handleImageClick}
           />
         ))}
       </div>
+
+      {/* Shared Gallery Lightbox overlay bounded perfectly inside preview viewport context */}
+      {isLightboxOpen && sectionImages.length > 0 && (
+        <div
+          id="gallery-lightbox"
+          onPointerDown={handlePointerDown}
+          onPointerUp={handlePointerUp}
+          className="absolute inset-0 bg-neutral-950/95 flex flex-col items-center justify-between p-6 z-[100] animate-fadeIn select-none"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Image Gallery Lightbox"
+        >
+          {/* Backdrop click dismiss trigger */}
+          <div className="absolute inset-0 z-10 cursor-default" onClick={() => setIsLightboxOpen(false)} />
+
+          {/* Header row: image counter + close button */}
+          <div className="w-full flex justify-between items-center z-20 text-neutral-400 font-semibold text-sm">
+            <span className="font-mono text-xs">{activeImageIndex + 1} / {sectionImages.length}</span>
+            <button
+              onClick={() => setIsLightboxOpen(false)}
+              className="p-2 hover:text-white transition-colors focus:outline-none"
+              aria-label="Close Lightbox"
+            >
+              <X className="w-6 h-6 animate-none" />
+            </button>
+          </div>
+
+          {/* Center row: prev button, image, next button */}
+          <div className="w-full flex-1 flex items-center justify-between gap-4 z-20 relative">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handlePrev();
+              }}
+              className="p-3 text-neutral-400 hover:text-white transition-colors focus:outline-none"
+              aria-label="Previous Image"
+            >
+              <ChevronLeft className="w-8 h-8" />
+            </button>
+
+            <div className="flex-1 max-w-[85%] h-[55vh] md:h-[65vh] flex items-center justify-center relative overflow-hidden">
+              <img
+                src={sectionImages[activeImageIndex]?.props?.src}
+                alt={sectionImages[activeImageIndex]?.props?.alt || "Gallery Image"}
+                className="max-w-full max-h-full object-contain transition-transform duration-300 pointer-events-none"
+              />
+            </div>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleNext();
+              }}
+              className="p-3 text-neutral-400 hover:text-white transition-colors focus:outline-none"
+              aria-label="Next Image"
+            >
+              <ChevronRight className="w-8 h-8" />
+            </button>
+          </div>
+
+          {/* Footer row: Caption based on alt text */}
+          <div className="w-full text-center z-20 text-neutral-300 text-sm max-w-[600px] mx-auto min-h-[24px]">
+            <p className="font-medium tracking-wide">{sectionImages[activeImageIndex]?.props?.alt || ""}</p>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
