@@ -41,8 +41,8 @@ function runBlockLibraryTests() {
   // Clear previous states
   mockLocalStorage.clear();
 
-  // 1. Registry Contains All 12 Blocks (Phase Expand Block Library complete)
-  assertEquals(starterBlocksRegistry.length, 12, "Blocks Registry contains exactly 12 blocks total");
+  // 1. Registry Contains All 19 Blocks (Phase Content complete)
+  assertEquals(starterBlocksRegistry.length, 19, "Blocks Registry contains exactly 19 blocks total");
   
   const heroSplitDef = findBlockById("hero-editorial-split");
   assertEquals(heroSplitDef !== null, true, "Block Registry contains hero-editorial-split");
@@ -85,6 +85,29 @@ function runBlockLibraryTests() {
 
   const f7Def = findBlockById("features-statement");
   assertEquals(f7Def !== null, true, "Block Registry contains features-statement");
+
+  // Verify Content Blocks are Registered
+  const c1Def = findBlockById("content-centered-columns");
+  assertEquals(c1Def !== null, true, "Block Registry contains content-centered-columns");
+  assertEquals(c1Def?.category, "Content", "content-centered-columns categorized under Content");
+
+  const c2Def = findBlockById("content-image-grid");
+  assertEquals(c2Def !== null, true, "Block Registry contains content-image-grid");
+
+  const c3Def = findBlockById("content-text-grid");
+  assertEquals(c3Def !== null, true, "Block Registry contains content-text-grid");
+
+  const c4Def = findBlockById("content-split-editorial");
+  assertEquals(c4Def !== null, true, "Block Registry contains content-split-editorial");
+
+  const c5Def = findBlockById("content-image-text");
+  assertEquals(c5Def !== null, true, "Block Registry contains content-image-text");
+
+  const c6Def = findBlockById("content-quote-image");
+  assertEquals(c6Def !== null, true, "Block Registry contains content-quote-image");
+
+  const c7Def = findBlockById("content-featured-stories");
+  assertEquals(c7Def !== null, true, "Block Registry contains content-featured-stories");
 
   // 2. Factory creates valid Section (Hero Centered)
   const sectionHeroCentered = heroCenteredDef!.createSection();

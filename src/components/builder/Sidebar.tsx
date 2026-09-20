@@ -428,7 +428,7 @@ export const Sidebar: React.FC = () => {
                             <div className="flex-1 bg-neutral-900 border border-neutral-850 p-2 rounded-sm flex flex-col gap-1.5 shadow-sm h-full justify-center">
                               <div className="w-8 h-0.75 bg-stone-700/50 rounded-full animate-none" />
                               <div className="w-14 h-1 bg-indigo-500/35 rounded-sm" />
-                              <div className="w-full h-4 bg-neutral-950 rounded-sm shrink-0 border border-neutral-800" />
+                              <div className="w-full h-4 bg-neutral-950 rounded-sm shrink-0 border border-neutral-850" />
                             </div>
                             {/* Vertical stack right */}
                             <div className="w-4/12 flex flex-col gap-1.5 shrink-0">
@@ -454,6 +454,128 @@ export const Sidebar: React.FC = () => {
                                 <div key={idx} className="space-y-0.75">
                                   <div className="w-10 h-0.75 bg-indigo-500/35 rounded-sm" />
                                   <div className="w-full h-0.5 bg-stone-800/20 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "content-centered-columns" ? (
+                          <div className="w-full flex flex-col justify-between py-1 px-1.5 z-10">
+                            {/* Centered intro header */}
+                            <div className="space-y-0.75 text-center flex flex-col items-center">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-20 h-1.5 bg-indigo-500/45 rounded-sm" />
+                            </div>
+                            {/* 3 columns */}
+                            <div className="flex gap-2.5 pt-2">
+                              {[1, 2, 3].map((col) => (
+                                <div key={col} className="flex-1 space-y-1 pt-1.5 border-t border-neutral-800/80">
+                                  <div className="w-5 h-0.75 bg-indigo-500/40 rounded-sm" />
+                                  <div className="w-full h-0.5 bg-stone-800/25 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "content-image-grid" ? (
+                          <div className="w-full flex flex-col justify-between py-1 z-10">
+                            {/* Header */}
+                            <div className="space-y-0.75">
+                              <div className="w-6 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-14 h-1 bg-indigo-500/35 rounded-sm" />
+                            </div>
+                            {/* 3 cards with image header */}
+                            <div className="flex gap-2 pt-1.5">
+                              {[1, 2, 3].map((idx) => (
+                                <div key={idx} className="flex-1 flex flex-col gap-1 shadow-sm">
+                                  <div className="w-full h-8 bg-neutral-900 border border-neutral-850 rounded-sm shrink-0 flex items-center justify-center overflow-hidden">
+                                    <ImageIcon className="w-2 h-2 text-stone-700/30" />
+                                  </div>
+                                  <div className="w-7 h-0.75 bg-indigo-500/40 rounded-sm mt-0.5" />
+                                  <div className="w-full h-0.5 bg-stone-800/25 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "content-text-grid" ? (
+                          <div className="w-full flex flex-col justify-center gap-1.5 py-1 z-10">
+                            <div className="space-y-0.75 text-center flex flex-col items-center mb-1">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-14 h-1 bg-indigo-500/35 rounded-sm" />
+                            </div>
+                            <div className="grid grid-cols-3 gap-1.5">
+                              {[1, 2, 3, 4, 5, 6].map((idx) => (
+                                <div key={idx} className="bg-neutral-900 border border-neutral-850 p-1 rounded-sm flex flex-col gap-0.5 shadow-sm">
+                                  <span className="text-[4px] text-stone-500/60 font-mono scale-[0.8] origin-left">0{idx}</span>
+                                  <div className="w-6 h-0.5 bg-indigo-500/45 rounded-sm" />
+                                  <div className="w-full h-0.25 bg-stone-800/30 rounded-full" />
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        ) : block.id === "content-split-editorial" ? (
+                          <div className="w-full flex gap-3.5 py-1 z-10 justify-between items-start">
+                            {/* Left column wide statement */}
+                            <div className="flex-1 space-y-1.5 pt-1">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full" />
+                              <div className="w-full h-1.5 bg-indigo-500/45 rounded-sm" />
+                              <div className="w-10/12 h-1.5 bg-indigo-500/45 rounded-sm" />
+                            </div>
+                            {/* Right supporting copy with vertical rule split line */}
+                            <div className="w-5/12 flex flex-col gap-1.5 shrink-0 border-l border-neutral-800/80 pl-2.5 h-full justify-center">
+                              <div className="w-full h-0.5 bg-stone-800/30 rounded-full" />
+                              <div className="w-11/12 h-0.5 bg-stone-800/30 rounded-full" />
+                              <div className="w-9 h-1.5 bg-indigo-500/30 rounded-sm mt-0.5" />
+                            </div>
+                          </div>
+                        ) : block.id === "content-image-text" ? (
+                          <div className="w-full flex gap-3.5 py-1 items-center z-10">
+                            {/* Left Image block */}
+                            <div className="w-5/12 aspect-[3/4] bg-neutral-900 border border-neutral-850 rounded flex items-center justify-center relative overflow-hidden shrink-0">
+                              <ImageIcon className="w-3.5 h-3.5 text-stone-700/35" />
+                            </div>
+                            {/* Right content texts */}
+                            <div className="flex-1 space-y-1.5">
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full mb-0.5" />
+                              <div className="w-16 h-1.5 bg-indigo-500/40 rounded-sm" />
+                              <div className="space-y-0.75">
+                                <div className="w-full h-0.5 bg-stone-800/20 rounded-full" />
+                                <div className="w-10/12 h-0.5 bg-stone-800/20 rounded-full" />
+                              </div>
+                            </div>
+                          </div>
+                        ) : block.id === "content-quote-image" ? (
+                          <div className="w-full flex gap-3.5 py-1 items-center z-10">
+                            {/* Left Quote */}
+                            <div className="flex-1 space-y-1.5">
+                              <div className="w-full h-1.5 bg-indigo-500/40 rounded-sm" />
+                              <div className="w-10/12 h-1.5 bg-indigo-500/40 rounded-sm" />
+                              <div className="w-8 h-0.75 bg-stone-700/50 rounded-full pt-1" />
+                            </div>
+                            {/* Right Image */}
+                            <div className="w-4/12 aspect-[1/1] bg-neutral-900 border border-neutral-850 rounded flex items-center justify-center relative overflow-hidden shrink-0">
+                              <ImageIcon className="w-3 h-3 text-stone-700/35" />
+                            </div>
+                          </div>
+                        ) : block.id === "content-featured-stories" ? (
+                          <div className="w-full flex gap-3 py-1 items-center z-10">
+                            {/* Left column large widescreen image + text */}
+                            <div className="flex-1 space-y-1">
+                              <div className="w-full h-9 bg-neutral-900 border border-neutral-850 rounded-sm shrink-0 flex items-center justify-center overflow-hidden">
+                                <ImageIcon className="w-2.5 h-2.5 text-stone-700/30" />
+                              </div>
+                              <div className="w-12 h-1 bg-indigo-500/40 rounded-sm" />
+                              <div className="w-full h-0.5 bg-stone-800/20 rounded-full" />
+                            </div>
+                            {/* Right stacked stories */}
+                            <div className="w-5/12 flex flex-col gap-1.5 shrink-0">
+                              {[1, 2].map((li) => (
+                                <div key={li} className="border-t border-neutral-800/80 py-1 flex gap-1 items-center">
+                                  <div className="w-4 h-4 bg-neutral-900 border border-neutral-850 rounded-sm flex items-center justify-center overflow-hidden shrink-0">
+                                    <span className="text-[3px] text-stone-700/35">🖼</span>
+                                  </div>
+                                  <div className="space-y-0.5 flex-1">
+                                    <div className="w-8 h-0.75 bg-indigo-500/35 rounded-sm" />
+                                    <div className="w-full h-0.25 bg-stone-800/20 rounded-full" />
+                                  </div>
                                 </div>
                               ))}
                             </div>

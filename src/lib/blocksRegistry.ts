@@ -12,6 +12,15 @@ import { createFeaturesEditorialListBlock } from "./blocks/featuresEditorialList
 import { createFeaturesAsymmetricGridBlock } from "./blocks/featuresAsymmetricGrid";
 import { createFeaturesStatementBlock } from "./blocks/featuresStatement";
 
+// 7 New Content blocks
+import { createContentCenteredColumnsBlock } from "./blocks/contentCenteredColumns";
+import { createContentImageGridBlock } from "./blocks/contentImageGrid";
+import { createContentTextGridBlock } from "./blocks/contentTextGrid";
+import { createContentSplitEditorialBlock } from "./blocks/contentSplitEditorial";
+import { createContentImageTextBlock } from "./blocks/contentImageText";
+import { createContentQuoteImageBlock } from "./blocks/contentQuoteImage";
+import { createContentFeaturedStoriesBlock } from "./blocks/contentFeaturedStories";
+
 export const starterBlocksRegistry: BlockDefinition[] = [
   // 1. HERO CATEGORY
   {
@@ -57,7 +66,7 @@ export const starterBlocksRegistry: BlockDefinition[] = [
     createSection: createServicesThreeColumnBlock,
   },
 
-  // 3. FEATURES CATEGORY (Phase Expand Block Library)
+  // 3. FEATURES CATEGORY
   {
     id: "features-three-column",
     name: "Features — Three Column",
@@ -113,6 +122,64 @@ export const starterBlocksRegistry: BlockDefinition[] = [
     description: "A massive, oversized left column editorial statement balanced with stacked, numbered right column support features.",
     previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
     createSection: createFeaturesStatementBlock,
+  },
+
+  // 4. CONTENT CATEGORY (Phase Content Category complete)
+  {
+    id: "content-centered-columns",
+    name: "Content — Centered Intro + Columns",
+    category: "Content",
+    description: "Large centered introduction paragraph balanced with three clean, text-based columns representing details.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createContentCenteredColumnsBlock,
+  },
+  {
+    id: "content-image-grid",
+    name: "Content — Image Grid",
+    category: "Content",
+    description: "A beautiful, spacious rows grid of editorial stories containing a widescreen photo, category, title, and body.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createContentImageGridBlock,
+  },
+  {
+    id: "content-text-grid",
+    name: "Content — Grid of Text Blocks",
+    category: "Content",
+    description: "A structured, quiet grid layout comprising 6 small cards with thin borders and extensive breathing whitespace.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createContentTextGridBlock,
+  },
+  {
+    id: "content-split-editorial",
+    name: "Content — Split Editorial",
+    category: "Content",
+    description: "A gorgeous split layout with heavy bold story statements left, and multiple supporting story copy columns right.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createContentSplitEditorialBlock,
+  },
+  {
+    id: "content-image-text",
+    name: "Content — Split Image + Text",
+    category: "Content",
+    description: "Spacious portrait photo layout on the left, balanced with comprehensive story content and labels on the right.",
+    previewImage: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80",
+    createSection: createContentImageTextBlock,
+  },
+  {
+    id: "content-quote-image",
+    name: "Content — Quote + Image",
+    category: "Content",
+    description: "A massive, prominent editorial pull-quote left matched with a beautifully balanced square photo landscape on the right.",
+    previewImage: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80",
+    createSection: createContentQuoteImageBlock,
+  },
+  {
+    id: "content-featured-stories",
+    name: "Content — Image + Three Stories",
+    category: "Content",
+    description: "A large featured story block with widescreen image on the left, balanced with smaller vertical story units on the right.",
+    previewImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80",
+    createSection: createContentFeaturedStoriesBlock,
   },
 ];
 
